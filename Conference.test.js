@@ -1,0 +1,1 @@
+const Conference = require('./Conference');

@@ -1,7 +1,6 @@
-const User = require('./User.js');
 
 
-class Author extends User {
+class Author {
 
 
 }
