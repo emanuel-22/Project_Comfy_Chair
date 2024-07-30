@@ -1,8 +1,10 @@
 
-const Session = require('./Session.js');
+const TypeSession = require('./TypeSession.js');
 
-class RegularSession extends Session {
-
+class RegularSession extends TypeSession {
+  is_accepted(article) {
+    return article.getType() === 'regular';
+  }
 }
 
 module.exports = RegularSession;
