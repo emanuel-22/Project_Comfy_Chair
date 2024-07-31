@@ -2,10 +2,10 @@ const Reception = require('./Reception.js');
 
 class Session {
 
-  constructor(topic_name, type_session) {
+  constructor(topic_name, session_type) {
     this._topic_name = topic_name;
-    this._state = new Reception(); // Patron State para manejo de estados por lo que pasa una sesion
-    this._type_session = type_session; // Patron Strategy para manejo de tipo de sesion (RegularSession, Workshop y PosterSession)
+    this._session_state = new Reception(this); // Patron State para manejo de estados por lo que pasa una sesion
+    this._session_type = session_type; // Patron Strategy para manejo de tipo de sesion (RegularSession, Workshop y PosterSession)
     this._articles = [];
   }
 
@@ -13,20 +13,32 @@ class Session {
     this._state = state;
   }
 
-  set_type_session(type_session) {
-    this._type_session = type_session;
+  set_type_session(session_type) {
+    this._session_type = session_type;
   }
 
-  type_session(){
-    return this._type_session
+  session_type(){
+    return this._session_type
+  }
+
+  session_state(){
+    return this._session_state
   }
 
   add_article(article) {
-    if (this._type_session.isArticleAccepted(article)) {
-      this._articles.push(article);
-    } else {
-      throw new Error("No se puede agregar este articulo a esta session");    
-    }
+    this._session_state.add_article(article);
+  }
+
+  is_accepted(article) {
+    return this._session_type.is_accepted(article);
+  }
+
+  add_article_to_list(article) {
+    this._articles.push(article);
+  }
+
+  articles(){
+    return this._articles
   }
 
 }

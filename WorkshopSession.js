@@ -1,10 +1,10 @@
 
-const TypeSession = require('./TypeSession.js');
+const SessionType = require('./SessionType.js');
 
-class WorkshopSession extends TypeSession {
+class WorkshopSession extends SessionType {
 
   is_accepted(article) {
-    const type = article.getType();
+    const type = article.get_type();
     return type === 'regular' || type === 'poster';
   }
 

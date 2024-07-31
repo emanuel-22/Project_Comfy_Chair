@@ -1,5 +1,6 @@
 const Conference = require('./Conference');
 const Session = require('./Session');
+const RegularSession = require('./RegularSession');
 
 let conference;
 let session1;
@@ -9,9 +10,10 @@ let session4;
 
 beforeEach( ()=> {
   conference = new Conference('CACIC', '2024-06-15', '09:00', '2024-06-19', '18:00');
-  session1 = new Session('Agentes y Sistemas Inteligentes');
-  session2 = new Session('Arquitectura, Redes y Sistemas Operativos');
-  session3 = new Session('Computación Gráfica, Imágenes y Visualización');
+  regularSession = new RegularSession();
+  session1 = new Session('Agentes y Sistemas Inteligentes',regularSession);
+  session2 = new Session('Arquitectura, Redes y Sistemas Operativos',regularSession);
+  session3 = new Session('Computación Gráfica, Imágenes y Visualización',regularSession);
   session4 = new Session('Ingeniería de Software');
 });
 

@@ -1,8 +1,8 @@
-const TypeSession = require('./TypeSession.js');
+const SessionType = require('./SessionType.js');
 
-class PosterSession extends TypeSession {
+class PosterSession extends SessionType {
   is_accepted(article) {
-    return article.getType()==='poster';
+    return article.get_type()==='poster';
   }
 }
 

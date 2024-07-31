@@ -1,9 +1,13 @@
 
-const TypeSession = require('./TypeSession.js');
+const SessionType = require('./SessionType.js');
 
-class RegularSession extends TypeSession {
+class RegularSession extends SessionType {
+  constructor() {
+    super();
+  }
+
   is_accepted(article) {
-    return article.getType() === 'regular';
+    return article.get_type()==='regular';
   }
 }
 

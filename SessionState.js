@@ -9,6 +9,10 @@ class SessionState {
     throw new Error("Este metodo debe ser empleado en las subclases");
   }
 
+  add_article(article) {
+    throw new Error("Este metodo debe ser empleado en las subclases");
+  }
+
 }
 
 module.exports = SessionState;
