@@ -3,7 +3,9 @@ const RegularSession = require('./RegularSession');
 const WorkshopSession = require('./WorkshopSession');
 const PosterSession = require('./PosterSession');
 
+const User = require('./User');
 const Author = require('./Author');
+
 const RegularArticle = require('./RegularArticle');
 const Poster = require('./Poster');
 
@@ -13,18 +15,18 @@ let workshopSessionType;
 let posterSessionType;
 
 beforeEach( ()=> {
-  first_author = new Author('Emanuel', 'Barboza', 'UNSa', 'emanuel@gmail.com', 'asdasd');
+  user_first = new User('Emanuel', 'Barboza', 'UNSa', 'emanuel@gmail.com', 'asdasd');
+  user_first.add_role('Autor');
 
   regularArticle = new RegularArticle('Razones de fracaso de desarrollo de software', 'https://refactoring.guru/design-patterns/state');
   posterArticle = new Poster('Implementacion de metodologia agil a organizaciones no gubernamentales', 'https://refactoring.guru/design-patterns/state');
 
-  regularArticle.add_author(first_author)
-  posterArticle.add_author(first_author)
+  regularArticle.add_author(user_first)
+  posterArticle.add_author(user_first)
 
   regularSessionType = new Session('Agentes y Sistemas Inteligentes', new RegularSession());
   workshopSessionType = new Session('Agentes y Sistemas Inteligentes', new WorkshopSession());
   posterSessionType = new Session('Agentes y Sistemas Inteligentes', new PosterSession());
-
 
 });
 

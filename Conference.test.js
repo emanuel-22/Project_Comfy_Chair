@@ -11,9 +11,9 @@ let session4;
 beforeEach( ()=> {
   conference = new Conference('CACIC', '2024-06-15', '09:00', '2024-06-19', '18:00');
   regularSession = new RegularSession();
-  session1 = new Session('Agentes y Sistemas Inteligentes',regularSession);
-  session2 = new Session('Arquitectura, Redes y Sistemas Operativos',regularSession);
-  session3 = new Session('Computación Gráfica, Imágenes y Visualización',regularSession);
+  session1 = new Session('Agentes y Sistemas Inteligentes', regularSession);
+  session2 = new Session('Arquitectura, Redes y Sistemas Operativos', regularSession);
+  session3 = new Session('Computación Gráfica, Imágenes y Visualización', regularSession);
   session4 = new Session('Ingeniería de Software');
 });
 

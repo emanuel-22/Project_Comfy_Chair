@@ -1,3 +1,8 @@
+const Chair = require('./Chair.js');
+const Author = require('./Author.js');
+const Reviewer = require('./Reviewer.js');
+
+
 class User {
   constructor(last_name, name, name_company, email, password) {
     this._last_name = last_name;
@@ -8,20 +13,53 @@ class User {
     this._roles = [];
   }
 
-  add_role(role) {
-    if (!this.has_role(role)) {
-      this._roles.push(role);
-    } else {
-      throw new Error('Este usuario ya tiene este rol asignado');
+  roles(){
+    return this._roles;
+  }
+
+  // Este es un methodo Factory
+  create_role(role_name){
+    switch (role_name) {
+      case 'Autor':
+        return new Author();
+      case 'Chair':
+        return new Chair();
+      case 'Revisor':
+        return new Reviewer();
+      default:
+        throw new Error('No se reconoce este rol');
     }
   }
 
-  has_role(role) {
-    return this._roles.includes(role);
+  has_role(role_name) {
+    return this._roles.some(role => role._name === role_name);
   }
 
-  roles(){
-    return this._roles;
+  find_role(roleName){
+    return this._roles.find(role => role._name === roleName);
+  }
+
+  add_role(role_name){
+    if (!this.has_role(role_name)){
+      const role = this.create_role(role_name)
+      if (role){
+        this._roles.push(role);
+      } else {
+        throw new Error('No se reconoce este rol');
+      }
+    } else {
+      throw new Error('Este usuario ya tiene este rol asignado');
+    }
+    
+  }
+
+  create_conference(name, from_date, from_hour, to_date, to_hour){
+    const chairRole = this.find_role('Chair')
+    if (chairRole) {
+      chairRole.create_conference(name, from_date, from_hour, to_date, to_hour)
+    }else{
+      throw new Error('El usuario no tiene permisos de Chair para crear conferencias');
+    }
   }
 
   

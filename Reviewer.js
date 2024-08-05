@@ -1,6 +1,10 @@
+const Role = require('./Role.js');
 
 
-class Reviewer  {
+class Reviewer extends Role{
+  constructor() {
+    super('Revisor');
+  }
 
 }
 
