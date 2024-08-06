@@ -2,10 +2,11 @@ const Reception = require('./Reception.js');
 
 class Session {
 
-  constructor(topic_name, session_type) {
+  constructor(topic_name, session_type, reception_deadline) {
     this._topic_name = topic_name;
-    this._session_state = new Reception(this); // Patron State para manejo de estados por lo que pasa una sesion
+    this._session_state = new Reception(this, reception_deadline); // Patron State para manejo de estados por lo que pasa una sesion
     this._session_type = session_type; // Patron Strategy para manejo de tipo de sesion (RegularSession, Workshop y PosterSession)
+    this._reception_deadline = reception_deadline
     this._articles = [];
   }
 

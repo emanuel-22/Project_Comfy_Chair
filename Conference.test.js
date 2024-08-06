@@ -1,28 +1,53 @@
 const Conference = require('./Conference');
 const Session = require('./Session');
 const RegularSession = require('./RegularSession');
+const PosterSession = require('./PosterSession');
+const WorkshopSession = require('./WorkshopSession');
 
-let conference;
-let session1;
-let session2;
-let session3;
-let session4;
+let conference,session_regular, session_poster, session_workshop;
+
 
 beforeEach( ()=> {
   conference = new Conference('CACIC', '2024-06-15', '09:00', '2024-06-19', '18:00');
-  regularSession = new RegularSession();
-  session1 = new Session('Agentes y Sistemas Inteligentes', regularSession);
-  session2 = new Session('Arquitectura, Redes y Sistemas Operativos', regularSession);
-  session3 = new Session('Computación Gráfica, Imágenes y Visualización', regularSession);
-  session4 = new Session('Ingeniería de Software');
+  session_regular = new Session('Agentes y Sistemas Inteligentes', new RegularSession());
+  session_poster = new Session('Agentes y Sistemas Inteligentes', new PosterSession());
+  session_workshop = new Session('Agentes y Sistemas Inteligentes', new WorkshopSession());
 });
 
 describe("Una conferencia ", ()=>{
   it("puede tener varias sesiones",()=>{
-    conference.add_session(session1);
-    conference.add_session(session2);
-    conference.add_session(session3);
-    conference.add_session(session4);
-    expect(conference.sessions()).toEqual([session1,session2,session3,session4]);
+    expect(() => {
+      conference.add_session('Agentes y Sistemas Inteligentes', 'Sesion Regular');
+      conference.add_session('Arquitectura, Redes y Sistemas Operativos', 'Sesion Regular');
+    }).not.toThrow();
+  })
+
+  it("puede crear una session regular",()=>{
+    conference.add_session('Agentes y Sistemas Inteligentes', 'Sesion Regular');
+    expect(conference.sessions()).toContainEqual(session_regular);
+  })
+
+  it("puede crear una session poster",()=>{
+    conference.add_session('Agentes y Sistemas Inteligentes', 'Sesion Poster');
+    expect(conference.sessions()).toContainEqual(session_poster);
+  })
+
+  it("puede crear una session workshop",()=>{
+    conference.add_session('Agentes y Sistemas Inteligentes', 'Sesion Workshop');
+    expect(conference.sessions()).toContainEqual(session_workshop);
+  })
+
+  it("no puede crear una session de tipo regular dos veces",()=>{
+    expect(() => {
+      conference.add_session('Agentes y Sistemas Inteligentes', 'Sesion Regular');
+      conference.add_session('Agentes y Sistemas Inteligentes', 'Sesion Regular');
+    }).toThrow();
+  })
+
+  it("no puede crear una session de otro tipo que no sea regular, poster, workshop",()=>{
+    expect(() => {
+      conference.add_session('Agentes y Sistemas Inteligentes', 'Otra Sesion');
+    }).toThrow();
   })
 })
+

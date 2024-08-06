@@ -21,11 +21,11 @@ class User {
   create_role(role_name){
     switch (role_name) {
       case 'Autor':
-        return new Author();
+        return new Author(this);
       case 'Chair':
-        return new Chair();
+        return new Chair(this);
       case 'Revisor':
-        return new Reviewer();
+        return new Reviewer(this);
       default:
         throw new Error('No se reconoce este rol');
     }
@@ -54,11 +54,20 @@ class User {
   }
 
   create_conference(name, from_date, from_hour, to_date, to_hour){
-    const chairRole = this.find_role('Chair')
+    var chairRole = this.find_role('Chair')
     if (chairRole) {
       chairRole.create_conference(name, from_date, from_hour, to_date, to_hour)
     }else{
       throw new Error('El usuario no tiene permisos de Chair para crear conferencias');
+    }
+  }
+
+  send_article(article, session){
+    var authorRole = this.find_role('Autor')
+    if (authorRole) {
+      authorRole.send_article(article, session)
+    }else{
+      throw new Error('El usuario no tiene permisos de Autor para mandar articulos a la sesion');
     }
   }
 

@@ -15,6 +15,14 @@ class Article {
     return this._authors;
   }
 
+  count_authors(){
+    return this._authors.length
+  }
+
+  validate_title(){
+    return this._title!=''
+  }
+
   set_notification_author(author){
     this._notification_author = author;
   }

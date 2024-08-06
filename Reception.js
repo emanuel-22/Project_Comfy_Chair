@@ -2,8 +2,9 @@ const SessionState = require("./SessionState");
 
 class Reception extends SessionState {
 
-  constructor(session) {
+  constructor(session, reception_deadline) {
     super(session);
+    this._reception_deadline = reception_deadline
   }
 
   next_state() {
