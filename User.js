@@ -62,10 +62,10 @@ class User {
     }
   }
 
-  send_article(article, session){
+  send_article(article, session, send_date){
     var authorRole = this.find_role('Autor')
     if (authorRole) {
-      authorRole.send_article(article, session)
+      authorRole.send_article(article, session, send_date)
     }else{
       throw new Error('El usuario no tiene permisos de Autor para mandar articulos a la sesion');
     }

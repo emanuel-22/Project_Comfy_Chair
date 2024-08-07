@@ -26,8 +26,8 @@ class Session {
     return this._session_state
   }
 
-  add_article(article) {
-    this._session_state.add_article(article);
+  receive_article(article, send_date) {
+    this._session_state.add_article(article, send_date);
   }
 
   is_accepted(article) {

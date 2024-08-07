@@ -7,9 +7,9 @@ class Author extends Role {
     super('Autor', user);
   }
   
-  send_article(article, session){
+  send_article(article, session, send_date){
     article.set_notification_author(this._user)
-    session.add_article(article)
+    session.receive_article(article, send_date)
   }
 
 }

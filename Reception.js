@@ -11,8 +11,12 @@ class Reception extends SessionState {
     this._session.set_state(new Bidding(this._session));
   }
 
-  add_article(article) {
-    if (this._session.is_accepted(article)) {
+  validated_dates(send_date){
+    return (send_date<=this._reception_deadline)
+  }
+
+  add_article(article, send_date) {
+    if (this._session.is_accepted(article) && this.validated_dates(send_date)) {
       this._session.add_article_to_list(article)
     } else {
       throw new Error('El articulo fue rechazado');

@@ -23,6 +23,8 @@ class Article {
     return this._title!=''
   }
 
+  
+
   set_notification_author(author){
     this._notification_author = author;
   }
