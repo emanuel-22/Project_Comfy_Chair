@@ -6,11 +6,11 @@ class SessionState {
   }
 
   next_state() {
-    throw new Error("Este metodo debe ser empleado en las subclases");
+    throw new Error("Este metodo esta empleado en las subclases");
   }
 
   add_article(article, send_date) {
-    throw new Error("Este metodo debe ser empleado en las subclases");
+    throw new Error("Este metodo esta empleado en las subclases");
   }
 
 }

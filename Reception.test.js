@@ -4,15 +4,11 @@ const WorkshopSession = require('./WorkshopSession');
 const PosterSession = require('./PosterSession');
 
 const User = require('./User');
-const Author = require('./Author');
-
 const RegularArticle = require('./RegularArticle');
 const Poster = require('./Poster');
 
 
-let regularSessionType;
-let workshopSessionType;
-let posterSessionType;
+let regularSessionType, workshopSessionType, posterSessionType;
 
 beforeEach( ()=> {
   timestamp = Date.now();

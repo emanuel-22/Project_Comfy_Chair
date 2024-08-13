@@ -1,4 +1,6 @@
 const SessionState = require("./SessionState");
+const Bidding = require("./Bidding");
+
 
 class Reception extends SessionState {
 

@@ -15,6 +15,8 @@ class RegularArticle extends Article {
     var words = this._abstract.split(' ');
     return words.length<300;
   }
+
+  
 }
 
 module.exports = RegularArticle;

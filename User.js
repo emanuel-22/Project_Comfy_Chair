@@ -63,13 +63,32 @@ class User {
   }
 
   send_article(article, session, send_date){
-    var authorRole = this.find_role('Autor')
-    if (authorRole) {
-      authorRole.send_article(article, session, send_date)
+    var author_role = this.find_role('Autor')
+    if (author_role) {
+      author_role.send_article(article, session, send_date)
     }else{
       throw new Error('El usuario no tiene permisos de Autor para mandar articulos a la sesion');
     }
   }
+
+  send_bids(article, session, bid){
+    var reviewer_role = this.find_role('Revisor')
+    if (reviewer_role) {
+      reviewer_role.send_bids(article, session, bid)
+    }else{
+      throw new Error('El usuario no tiene permisos de Revisor para enviar bids');
+    }
+  }
+
+  send_article_to_review(article, reviewer){
+    var chairRole = this.find_role('Chair')
+    if (chairRole) {
+      chairRole.send_article_to_review(article, reviewer)
+    }else{
+      throw new Error('El usuario no tiene permisos de Chair para asignar articulos para revisión');
+    }
+  }
+
 
   
 }
