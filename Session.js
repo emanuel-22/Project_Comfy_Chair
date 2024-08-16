@@ -9,6 +9,7 @@ class Session {
     this._reception_deadline = reception_deadline;
     this._articles = [];
     this._reviewers = [];
+    this._count_reviews = 0;
   }
 
   set_state(state, reception_deadline) {
@@ -44,18 +45,41 @@ class Session {
     }
   }
 
-
   send_articles_randomly(){
-    if (this.count_articles()!=0){
-      this._articles.forEach(article => { 
-        let reviewer_random = this._reviewers[Math.floor(Math.random() * this._reviewers.length)];
-        if (!article.find_user_in_list_pending(reviewer_random)){
-          console.log(`El Artículo "${article._title}" fue asignado a ${reviewer_random._last_name} ${reviewer_random._name}`);
-          article.process_add_to_pending(reviewer_random);
-        } 
-      });
+    let error_message = '';
+    if (this.count_reviewers()==0){
+      error_message = 'La sesión no tiene revisores';
+    }
+    if (this.count_articles()==0){
+      error_message = 'La sesión no tiene articulos';
+    }
+    if (this.count_reviewers()<3){
+      error_message = 'La cantidad de revisores no satisface la cantidad de revisiones';
+    }
+    if (error_message) {
+      throw new Error(error_message.trim());
     }else{
-      throw new Error('La sesion no tiene articulos');
+
+      let copy_articles = this.articles();
+      let copy_reviewers = this.reviewers();
+      copy_articles.sort(() => Math.random() - 0.5);
+      copy_reviewers.sort(() => Math.random() - 0.5);
+
+      let start_index = 0;
+      let num_articles_to_assign = Math.floor(this.count_reviews() / this.count_reviewers());
+
+      for (let reviewerIndex = 0; reviewerIndex < this.count_reviewers(); reviewerIndex++) {
+        let reviewer = copy_reviewers[reviewerIndex];
+        let assigned_count = 0;
+        while (assigned_count < num_articles_to_assign) {
+          let articleIndex = (start_index + assigned_count) % this.count_articles();
+          let article = copy_articles[articleIndex];
+          //console.log(`----------El revisor ${reviewer._name} revisará: ${article._title}--------------------`);
+          article.process_add_to_pending(reviewer);
+          assigned_count++;
+        }
+        start_index = (start_index + num_articles_to_assign) % this.count_articles();
+      } 
     }
   }
 
@@ -104,7 +128,16 @@ class Session {
     return this._articles.length
   }
 
- 
+  count_reviews(){
+    return this.count_articles()*3
+  }
+
+  assign_reviewers_to_article(){
+    this._articles.forEach(article => {
+      this._session_state.assign_reviewers(article);
+    });
+  }
+  
 
 
 }
