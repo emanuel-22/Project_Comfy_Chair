@@ -1,3 +1,5 @@
+const ReviewArticle = require("./ReviewArticle");
+
 class Article {
   
   constructor(title, attached_file_url) {
@@ -11,7 +13,9 @@ class Article {
     this._list_interested = [];
     this._list_not_interested = [];
     this._list_maybe = [];
-    this._confirmed_reviewers = [];
+    this._review_article = [];
+
+    this._average_score = 0;
   }
 
   add_author(author){
@@ -149,20 +153,49 @@ class Article {
     }
   }
 
-  
-
-
   process_assign_reviewers(){
-    this._confirmed_reviewers = this._confirmed_reviewers.concat(this._list_interested.slice(0, 3))
-    if (this._confirmed_reviewers.length < 3) {
-      const num_missing = 3 - this._confirmed_reviewers.length;
-      this._confirmed_reviewers = this._confirmed_reviewers.concat(this._list_maybe.slice(0, num_missing));
+    const list_interested = this._list_interested.slice(0, 3)
+    this._review_article =  list_interested.map(reviewer => new ReviewArticle(reviewer));
+
+    if (this._review_article.length < 3) {
+      const num_missing = 3 - this._review_article.length;
+      const list_maybe = this._list_maybe.slice(0, num_missing);
+      const list_review_maybe = list_maybe.map(reviewer => new ReviewArticle(reviewer));
+      this._review_article = this._review_article.concat(list_review_maybe);
     }
-    if (this._confirmed_reviewers.length < 3) {
-      const num_missing = 3 - this._confirmed_reviewers.length;
-      this._confirmed_reviewers = this._confirmed_reviewers.concat(this._list_not_interested.slice(0, num_missing));
+    if (this._review_article.length < 3) {
+      const num_missing = 3 - this._review_article.length;
+      const list_not_interested = this._list_not_interested.slice(0, num_missing);
+      const list_review_not_interested = list_not_interested.map(reviewer => new ReviewArticle(reviewer));
+      this._review_article = this._review_article.concat(list_review_not_interested);
     }
   }
+
+  confirmed_reviewers(){
+    return this._review_article.map(review_article => review_article._reviewer);
+  }
+
+  find_in_confirmed_reviewer(user){
+    return this._review_article.find(reviewArticle => reviewArticle._reviewer === user);
+  }
+
+  process_score(score, user, text){
+    const review_article = find_in_confirmed_reviewer(user)
+    if (review_article){
+      review_article.asign_score(score, text);
+    }else{
+      throw new Error('Este revisor no esta confirmado para revisar este artículo');
+    }
+  }
+
+
+  calculate_average_score(){
+    const total_score = this._review_article.reduce((sum, review_article)=>sum+(review_article._score || 0));
+    this._average_score = this._review_article.length ? total_score / this._review_article.length : 0;
+  }
+
+
+
 
 
 }

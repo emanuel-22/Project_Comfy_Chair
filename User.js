@@ -4,10 +4,10 @@ const Reviewer = require('./Reviewer.js');
 
 
 class User {
-  constructor(last_name, name, name_company, email, password) {
+  constructor(last_name, name, company_name, email, password) {
     this._last_name = last_name;
     this._name = name;
-    this._name_company = name_company
+    this._company_name = company_name
     this._email = email;
     this._password = password;
     this._roles = [];
@@ -27,7 +27,7 @@ class User {
       case 'Revisor':
         return new Reviewer(this);
       default:
-        throw new Error('No se reconoce este rol');
+        throw new Error('No se reconoce este tipo de rol');
     }
   }
 
@@ -40,17 +40,19 @@ class User {
   }
 
   add_role(role_name){
-    if (!this.has_role(role_name)){
-      const role = this.create_role(role_name)
-      if (role){
-        this._roles.push(role);
-      } else {
-        throw new Error('No se reconoce este rol');
-      }
-    } else {
-      throw new Error('Este usuario ya tiene este rol asignado');
+    let error_message = '';
+    if(this.has_role(role_name)){
+      error_message = 'Este usuario ya tiene este rol asignado'
     }
-    
+    if (this.find_role(role_name)) {
+      error_message = 'No se reconoce este tipo de rol'
+    }
+    if (error_message) {
+      throw new Error(error_message.trim());
+    }else{
+      const role = this.create_role(role_name);
+      this._roles.push(role);
+    }
   }
 
   create_conference(name, from_date, from_hour, to_date, to_hour){
@@ -59,6 +61,15 @@ class User {
       chairRole.create_conference(name, from_date, from_hour, to_date, to_hour)
     }else{
       throw new Error('El usuario no tiene permisos de Chair para crear conferencias');
+    }
+  }
+
+  assign_article_to_reviewer(article, reviewer){
+    var chairRole = this.find_role('Chair')
+    if (chairRole) {
+      chairRole.send_article_to_review(article, reviewer)
+    }else{
+      throw new Error('El usuario no tiene permisos de Chair para asignar articulos para revisión');
     }
   }
 
@@ -80,17 +91,15 @@ class User {
     }
   }
 
-  send_article_to_review(article, reviewer){
-    var chairRole = this.find_role('Chair')
-    if (chairRole) {
-      chairRole.send_article_to_review(article, reviewer)
+  send_score(article, session, score){
+    var reviewer_role = this.find_role('Revisor')
+    if (reviewer_role) {
+      reviewer_role.send_score(article, session, score)
     }else{
-      throw new Error('El usuario no tiene permisos de Chair para asignar articulos para revisión');
+      throw new Error('El usuario no tiene permisos de Revisor para enviar calificación de este artículo');
     }
   }
 
-
-  
 }
 
 module.exports = User;

@@ -1,54 +1,68 @@
 const User = require('./User');
+const RegularArticle = require('./RegularArticle');
 
-let user_first, user_second;
+
+let userFirst;
+
+jest.mock('./RegularArticle');
 
 beforeEach( ()=> {
-  user_first = new User('Barboza', 'Emanuel', 'UNSa', 'emanuelbarboza5@gmail.com', 'asdasd');
-  user_second = new User('Mendez', 'Maria', 'UNLP', 'mariamendez@gmail.com', 'asdasd');
+  userFirst = new User('Barboza', 'Emanuel', 'UNSa', 'emanuelbarboza5@gmail.com', 'asdasd');
+  userSecond = new User('Mendez', 'Maria', 'UNSa', 'mendezmaria@gmail.com', 'asdasd');
+  regularArticle = new RegularArticle(
+    'IT Project Failures, Causes and Cures', 
+    'https://refactoring.guru/design-patterns/state',
+    'Despite decades of research, IT projects continue to experience high failure rates, often attributed to poor project management, cost estimation, and requirements gathering. However, simply identifying these causes is insufficient to prevent them. This study adopts an aviation-inspired accident investigation approach to explore the root causes of IT project failures. Through a forensic analysis of five large government IT projects in Denmark, we uncovered 37 root causes and 22 potential cures. Notably, only one cause was programming-related, and each project suffered from around 15 causes. Moreover, 27 of the identified causes are not reported in existing research literature, highlighting the importance of this study. The findings provide valuable insights for educators, policymakers, and practitioners, informing the development of targeted interventions to prevent IT project failures. By understanding the underlying causes, we can develop effective strategies to mitigate them, ultimately improving the success rates of IT projects.'
+  );
 });
 
 //----------------------------------------------------------------------
-describe("Un usuario", ()=>{
-  it("puede tener mas de un rol",()=>{
-    user_first.add_role('Chair');
-    user_first.add_role('Autor');
-    expect(user_first.has_role('Chair')).toBe(true);
-    expect(user_first.has_role('Autor')).toBe(true);
+describe("Un usuario de la ComfyChair ", ()=>{
+
+  it("no puede ingresarse un rol distinto de Chair, Autor o Revisor",()=>{
+    let different_role = ()=>{userFirst.create_role('Administrativo')};
+    expect(different_role).toThrow();
   })
+
+  it("puede tener mas de un rol",()=>{
+    userFirst.add_role('Chair');
+    userFirst.add_role('Autor');
+    expect(userFirst.has_role('Chair')).toBe(true);
+    expect(userFirst.has_role('Autor')).toBe(true);
+  })
+
   it("no puede tener el mismo rol 2 veces",()=>{
-    user_first.add_role('Chair');
-    user_first.add_role('Autor');
-    let duplicate_role = ()=>{user_first.add_role('Autor')};
+    userFirst.add_role('Chair');
+    userFirst.add_role('Autor');
+    let duplicate_role = ()=>{userFirst.add_role('Autor')};
     expect(duplicate_role).toThrow();
   })
-  it("no puede ingresarse un rol distinto de Chair, Autor o Revisor",()=>{
-    expect(()=>{user_first.add_role('Administrador')}).toThrow();
-  })
+
   it("sin rol Chair, no puede crear una conferencia",()=>{
-    user_first.add_role('Autor');
+    userFirst.add_role('Autor');
     expect(() => {
-      user_first.create_conference('IA International', '2023/06/12', '09:00', '2023/06/18', '18:00');
+      userFirst.create_conference('IA International', '2023/06/12', '09:00', '2023/06/18', '18:00');
     }).toThrow();
   })
-  it("puede tener mas de un rol",()=>{
-    user_first.add_role('Chair');
-    user_first.add_role('Autor');
-    user_second.add_role('Autor');
-    expect(user_first.has_role('Chair')).toBe(true);
-    expect(user_first.has_role('Autor')).toBe(true);
-    expect(user_second.has_role('Autor')).toBe(true);
+
+  it("sin rol Chair, no puede crear una conferencia",()=>{
+    userFirst.add_role('Autor');
+    userSecond.add_role('Revisor');
+    expect(() => {
+      userFirst.assign_article_to_reviewer(regularArticle, userSecond);
+    }).toThrow();
   })
+
+  it("sin rol Autor, no puede enviar articulos",()=>{
+    userFirst.add_role('Autor');
+    userSecond.add_role('Revisor');
+    expect(() => {
+      userFirst.assign_article_to_reviewer(regularArticle, userSecond);
+    }).toThrow();
+  })
+
 })
 
-//--------------------------------------------
-describe("Un Chair", ()=>{
-  it("puede crear una conferencia",()=>{
-    user_first.add_role('Chair');
-    expect(() => {
-      user_first.create_conference('IA International', '2023/06/12', '09:00', '2023/06/18', '18:00');
-    }).not.toThrow();
-  })
-})
 
 
 

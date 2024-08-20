@@ -68,7 +68,7 @@ describe("Las sesiones en Assigment", () =>{
     it("puede asignar un artículo a un revisor",()=>{
       user_first.add_role('Chair');
       regularSessionType.add_reviewer(user_fifth); 
-      user_first.send_article_to_review(regularArticle, user_fifth);
+      user_first.assign_article_to_reviewer(regularArticle, user_fifth);
       expect(regularArticle.count_pending_reviewers()).not.toBe(0);
     })
   })

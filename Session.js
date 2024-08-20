@@ -2,7 +2,7 @@ const Reception = require('./Reception.js');
 
 class Session {
 
-  constructor(topic_name, session_type, reception_deadline) {
+  constructor(topic_name, session_type, reception_deadline, selection_method) {
     this._topic_name = topic_name;
     this._session_state = new Reception(this, reception_deadline); // Patron State para manejo de estados por lo que pasa una sesion
     this._session_type = session_type; // Patron Strategy para manejo de tipo de sesion (RegularSession, Workshop y PosterSession)
@@ -10,6 +10,9 @@ class Session {
     this._articles = [];
     this._reviewers = [];
     this._count_reviews = 0;
+    this._selection_method = selection_method;
+
+    this._num_max_accepted = 0;
   }
 
   set_state(state, reception_deadline) {
@@ -137,8 +140,40 @@ class Session {
       this._session_state.assign_reviewers(article);
     });
   }
+
+  receive_score(article, score, user, text){
+    if(!this.find_article(article)){
+      error_message = 'Este articulo no fue aceptado en la recepción'
+    }
+    if (score < -3 || score > 3) {
+      error_message = 'La calificación esta fuera de rango'
+    }
+    if (!Number.isInteger(score)) {
+      error_message = 'La calificación debe ser un número entero. ';
+    }
+    if (error_message) {
+      throw new Error(error_message.trim());
+    }else{
+      this._session_state.assign_score(article, score, user, text);
+    }
+  }
+
+  define_num_max_accepted(num){
+    this._num_max_accepted = num;
+  }
+
+  num_max_accepted(){
+    return this._num_max_accepted;
+  }
   
 
+  set_selection_method(selection_method){
+    this._selection_method = selection_method;
+  }
+
+  start_articles_select() {
+    return this._selection_method.select(this._articles);
+  }
 
 }
 

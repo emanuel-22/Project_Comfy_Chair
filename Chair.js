@@ -20,6 +20,12 @@ class Chair extends Role {
     } 
   }
 
+  define_num_max_accepted(session, num){
+    session.define_num_max_accepted(num);
+  }
+
+
+
 }
 
 module.exports = Chair;

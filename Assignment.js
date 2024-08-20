@@ -5,7 +5,6 @@ class Assignment extends SessionState {
 
   constructor(session) {
     super(session);
-    
   }
 
   next_state() {
