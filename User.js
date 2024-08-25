@@ -64,10 +64,10 @@ class User {
     }
   }
 
-  assign_article_to_reviewer(article, reviewer){
+  assign_article_to_reviewer(article, session, reviewer){
     var chairRole = this.find_role('Chair')
-    if (chairRole) {
-      chairRole.send_article_to_review(article, reviewer)
+    if (chairRole){
+      chairRole.send_article_to_review(article, session, reviewer)
     }else{
       throw new Error('El usuario no tiene permisos de Chair para asignar articulos para revisión');
     }
@@ -91,10 +91,10 @@ class User {
     }
   }
 
-  send_score(article, session, score){
+  send_score(article, session, score, text){
     var reviewer_role = this.find_role('Revisor')
     if (reviewer_role) {
-      reviewer_role.send_score(article, session, score)
+      reviewer_role.send_score(article, session, score, text)
     }else{
       throw new Error('El usuario no tiene permisos de Revisor para enviar calificación de este artículo');
     }

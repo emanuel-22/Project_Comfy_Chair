@@ -1,18 +1,16 @@
-
 const RegularSession = require('./RegularSession.js');
 const WorkshopSession = require('./WorkshopSession.js');
 const PosterSession = require('./PosterSession.js');
 const Session = require('./Session.js');
 
-
 class Conference {
   
-  constructor(name, from_date, from_hour, to_date, to_hour) {
+  constructor(name, from_date, from_hours, to_date, to_hours) {
     this._name = name;
     this._from_date = from_date;
     this._to_date = to_date;
-    this._from_hour = from_hour;
-    this._to_hour = to_hour;
+    this._from_hours = from_hours;
+    this._to_hours = to_hours;
     this._sessions = [];
     this._chairs = [];
     this._program_committee = [];
@@ -42,25 +40,60 @@ class Conference {
     );
   }
 
+  find_session(session_name, type_session){
+    return this._sessions.find(
+      session => (session._topic_name === session_name && session._session_type._name === type_session)
+    );
+  }
+
   add_session(session_name, type_session, reception_deadline){
-    if (!this.has_session(session_name, type_session)){
-      const session = this.create_session(session_name, type_session, reception_deadline)
-      if (session){
-        this._sessions.push(session);
-      } else {
-        throw new Error('No se reconoce este tipo de session');
-      }
-    } else {
-      throw new Error('Este tipo de session con este nombre ya fue agregado a la conferencia');
+    let error_message = '';
+    if(this.has_session(session_name, type_session)){
+      error_message = 'Este tipo de session con este nombre ya fue agregado a la conferencia'
+    }  
+    if (this.find_session(session_name, type_session)) {
+      error_message = 'No se reconoce este tipo de sesión'
     }
+    if (error_message) {
+      throw new Error(error_message.trim());
+    }else{
+      const session = this.create_session(session_name, type_session, reception_deadline)
+      this._sessions.push(session);
+    } 
+  }
+
+  has_chair(user){
+    return this._chairs.some(
+      chair => (chair===user) 
+    );
   }
 
   add_chairs(chair){
-    this._chairs.push(chair);
+    if(!this.has_chair(chair)){
+      if(!chair.has_role('Chair')){
+        chair.add_role('Chair')
+      }
+      this._chairs.push(chair);
+    }else{
+      throw new Error('Este usuario ya se encuentra en la lista de chairs de la conferencia');
+    }
+  }
+
+  has_reviewer(user){
+    return this._program_committee.some(
+      reviewer => (reviewer===user) 
+    );
   }
 
   add_program_committee(reviewer){
-    this._program_committee.push(reviewer);
+    if(!this.has_reviewer(reviewer)){
+      if(!reviewer.has_role('Revisor')){
+        reviewer.add_role('Revisor')
+      }
+      this._program_committee.push(reviewer);
+    }else{
+      throw new Error('Este usuario ya se encuentra en el comité del programa de la conferencia');
+    }
   }
 
   sessions(){

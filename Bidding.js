@@ -12,11 +12,11 @@ class Bidding extends SessionState {
   }
 
   add_article(article, send_date) {
-    throw new Error('Durante esta instancia, ya no se aceptan mas articulos');
+    throw new Error('Durante esta instancia, ya no se aceptan más articulos');
   }
 
   assign_bids(article, bid, user){
-    article.process_add_to_lists(bid, user)
+    article.process_assign_bid(bid, user)
   }
 }
 

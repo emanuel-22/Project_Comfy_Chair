@@ -17,6 +17,10 @@ class SessionState {
     throw new Error("Este metodo esta empleado en las subclases");
   }
 
+  assign_bids(article, bid, user){
+    throw new Error("Este metodo esta empleado en las subclases");
+  }
+
 
 }
 

@@ -14,8 +14,6 @@ class Reviewer extends Role{
     session.receive_score(article, score, this._user, text)
   }
 
-
-
 }
 
 module.exports = Reviewer;

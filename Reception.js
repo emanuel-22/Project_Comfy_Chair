@@ -21,7 +21,7 @@ class Reception extends SessionState {
     if (this._session.is_accepted(article) && this.validated_dates(send_date)) {
       this._session.add_article_to_list(article)
     } else {
-      throw new Error('El articulo fue rechazado');
+      throw new Error('El articulo fue rechazado en esta Sesión');
     }
   }
 

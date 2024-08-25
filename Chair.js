@@ -11,12 +11,12 @@ class Chair extends Role {
     return new Conference(name, from_date, from_hour, to_date, to_hour);
   }
 
-  send_article_to_review(article, reviewer){
+  send_article_to_review(article, session, reviewer){
     var reviewer_role = reviewer.find_role('Revisor')
     if (reviewer_role) {
-      article.process_add_to_pending(reviewer);
+      session.assign_reviewer_to_bid(article, reviewer);
     }else{
-      throw new Error('El usuario que se asigno no es revisor de esta sesión');
+      throw new Error('El usuario que se asigno no tiene rol de revisor');
     } 
   }
 

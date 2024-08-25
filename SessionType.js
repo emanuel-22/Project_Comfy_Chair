@@ -5,14 +5,26 @@ class SessionType {
     this._name = name;
   }
 
+  is_accepted(article) {
+    throw new Error('Debe implementarse en las subclases');
+  }
+
   validated_abstract(article){
     throw new Error('Debe implementarse en las subclases');
   }
 
-
-  is_accepted(article) {
+  validated_get_type(article){
     throw new Error('Debe implementarse en las subclases');
   }
+
+  validated_title(article){
+    return article.validated_title();
+  }
+
+  validated_count_authors(article){
+    return article.count_authors()>=1;
+  }
+
 }
 
 module.exports = SessionType;

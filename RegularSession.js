@@ -6,8 +6,16 @@ class RegularSession extends SessionType {
     super('Sesion Regular');
   }
 
+  validated_get_type(article){
+    return article.get_type()==='regular';
+  }
+
+  validated_abstract(article){
+    return article.validated_abstract();
+  }
+
   is_accepted(article) {
-   return (article.get_type()==='regular' && article.validated_abstract() && article.validate_title() && (article.count_authors()>=1))
+   return (this.validated_get_type(article) && this.validated_abstract(article) && this.validated_title(article) && this.validated_count_authors(article));
   }
 }
 

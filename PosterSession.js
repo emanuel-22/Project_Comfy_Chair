@@ -4,8 +4,13 @@ class PosterSession extends SessionType {
   constructor() {
     super('Sesion Poster');
   }
+
+  validated_get_type(article){
+    return article.get_type()==='poster';
+  }
+
   is_accepted(article) {
-    return (article.get_type()==='poster' && article.validate_title() && (article.count_authors()>=1));
+    return (this.validated_get_type(article) && this.validated_title(article) && this.validated_count_authors(article));
   }
 }
 
