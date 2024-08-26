@@ -9,6 +9,10 @@ class Reception extends SessionState {
     this._reception_deadline = reception_deadline
   }
 
+  name_state(){
+    return 'Recepción'
+  }
+
   next_state() {
     this._session.set_state(new Bidding(this._session));
   }

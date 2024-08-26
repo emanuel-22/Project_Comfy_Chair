@@ -1,74 +1,62 @@
 const User = require('./User');
-const RegularArticle = require('./RegularArticle');
-const RegularSession = require('./RegularSession');
+const Poster = require('./Poster');
+const PosterSession = require('./PosterSession');
 const Session = require('./Session');
 
 
 beforeEach(async ()=> {
-  // timestamp = Date.now();
-  // date = new Date(timestamp);
-  // date_finally = date.toISOString().split('T')[0];
-  // regularSessionType = new Session('Agentes y Sistemas Inteligentes', new RegularSession(), date_finally);
+  timestamp = Date.now();
+  date = new Date(timestamp);
+  deadline = date.toISOString().split('T')[0];
 
-  // user_first = new User('Cruz', 'Rosana', 'UNSa', 'cruzrosana@gmail.com', 'asdasd');
-  // user_second = new User('Mendez', 'Maria', 'UNLP', 'mariamendez@gmail.com', 'asdasd');
+  dateOther = new Date('2024-07-27');
+  shippingDate = dateOther.toISOString().split('T')[0]; //2024-07-27
 
+  posterSessionType = new Session('Agentes y Sistemas Inteligentes', new PosterSession(), deadline);
+  posterSessionType.proceed(); // Nos movemos de Recepción a Bidding
+  posterSessionType.proceed(); // Nos movemos de Bidding a Asignacion
 
-  // user_third = new User('Mendez', 'Mariano', 'UNJU', 'marianomendez@gmail.com', 'asdasd');
-  // user_fourth = new User('Rodriguez', 'Maria', 'UNLP', 'mariarodriguez@gmail.com', 'asdasd');
-  // user_fifth = new User('Lopez', 'Rosa', 'UNLP', 'lopezrosa@gmail.com', 'asdasd');
-  // user_sixth = new User('Rodriguez', 'Dalma', 'UNJU', 'dalmarodriguez@gmail.com', 'asdasd');
+  userFirst = new User('Cruz', 'Rosana', 'UNSa', 'cruzrosana@gmail.com', 'asdasd');
+  userSecond = new User('Galvan', 'Lucas', 'UBA', 'lucasg@gmail.com', 'asdasd');
+  userThird = new User('Mamani', 'Rosana', 'UNSa', 'mamanirosi@gmail.com', 'asdasd');
+  userFourth = new User('Lopez', 'Juan', 'UNSa', 'juanlopez@gmail.com', 'asdasd');
 
-  // user_first.add_role('Autor');
-  // user_second.add_role('Autor');
-  // user_third.add_role('Autor');
-
-  // // -------------------------------------Primer Articulo--------------------------------------
-  // regularArticle = new RegularArticle(
-  //   'IT Project Failures, Causes and Cures', 
-  //   'https://refactoring.guru/design-patterns/state',
-  //   'Despite decades of research, IT projects continue to experience high failure rates, often attributed to poor project management, cost estimation, and requirements gathering. However, simply identifying these causes is insufficient to prevent them. This study adopts an aviation-inspired accident investigation approach to explore the root causes of IT project failures. Through a forensic analysis of five large government IT projects in Denmark, we uncovered 37 root causes and 22 potential cures. Notably, only one cause was programming-related, and each project suffered from around 15 causes. Moreover, 27 of the identified causes are not reported in existing research literature, highlighting the importance of this study. The findings provide valuable insights for educators, policymakers, and practitioners, informing the development of targeted interventions to prevent IT project failures. By understanding the underlying causes, we can develop effective strategies to mitigate them, ultimately improving the success rates of IT projects.'
-  // );
-  // regularArticle.add_author(user_first);
-  // user_first.send_article(regularArticle, regularSessionType, date_finally);
-
-  // // -------------------------------------Segundo Articulo--------------------------------------
-  // regularArticle2 = new RegularArticle(
-  //   'Review and critique of the information systems development project failure literature: An argument for exploring information systems development project distress', 
-  //   'https://refactoring.guru/design-patterns/state',
-  //   'Despite decades of research, IT projects continue to experience high failure rates, often attributed to poor project management, cost estimation, and requirements gathering. However, simply identifying these causes is insufficient to prevent them. This study adopts an aviation-inspired accident investigation approach to explore the root causes of IT project failures. Through a forensic analysis of five large government IT projects in Denmark, we uncovered 37 root causes and 22 potential cures. Notably, only one cause was programming-related, and each project suffered from around 15 causes. Moreover, 27 of the identified causes are not reported in existing research literature, highlighting the importance of this study. The findings provide valuable insights for educators, policymakers, and practitioners, informing the development of targeted interventions to prevent IT project failures. By understanding the underlying causes, we can develop effective strategies to mitigate them, ultimately improving the success rates of IT projects.'
-  // );
-  // regularArticle2.add_author(user_second);
-  // user_second.send_article(regularArticle2, regularSessionType, date_finally);
-
-  // // -------------------------------------Tercer Articulo--------------------------------------
-  // regularArticle3 = new RegularArticle(
-  //   'Shared leadership and project success: The roles of knowledge sharing,cohesion and trust in the team',
-  //   'https://refactoring.guru/state',
-  //   'Despite decades of research, IT projects continue to experience high failure rates, often attributed to poor project management, cost estimation, and requirements gathering. However, simply identifying these causes is insufficient to prevent them. This study adopts an aviation-inspired accident investigation approach to explore the root causes of IT project failures. Through a forensic analysis of five large government IT projects in Denmark, we uncovered 37 root causes and 22 potential cures. Notably, only one cause was programming-related, and each project suffered from around 15 causes. Moreover, 27 of the identified causes are not reported in existing research literature, highlighting the importance of this study. The findings provide valuable insights for educators, policymakers, and practitioners, informing the development of targeted interventions to prevent IT project failures. By understanding the underlying causes, we can develop effective strategies to mitigate them, ultimately improving the success rates of IT projects.'
-  // );
-  // regularArticle3.add_author(user_third);
-  // user_third.send_article(regularArticle3, regularSessionType, date_finally);
-
-  // //-------------------------------------Cuarto Articulo--------------------------------------
-  // regularArticle4 = new RegularArticle(
-  //   'Software Project Failure Process Definition',
-  //   'https://refactoring.guru/',
-  //   'Despite decades of research, IT projects continue to experience high failure rates, often attributed to poor project management, cost estimation, and requirements gathering. However, simply identifying these causes is insufficient to prevent them. This study adopts an aviation-inspired accident investigation approach to explore the root causes of IT project failures. Through a forensic analysis of five large government IT projects in Denmark, we uncovered 37 root causes and 22 potential cures. Notably, only one cause was programming-related, and each project suffered from around 15 causes. Moreover, 27 of the identified causes are not reported in existing research literature, highlighting the importance of this study. The findings provide valuable insights for educators, policymakers, and practitioners, informing the development of targeted interventions to prevent IT project failures. By understanding the underlying causes, we can develop effective strategies to mitigate them, ultimately improving the success rates of IT projects.'
-  // );
-  // regularArticle4.add_author(user_third);
-  // user_third.send_article(regularArticle4, regularSessionType, date_finally);
-
-  // regularSessionType.proceed(); // Nos movemos de Recepción a Bidding
-  
+  posterArticle = new Poster(
+    'Implementacion de metodologia agil a organizaciones no gubernamentales', 
+    'https://refactoring.guru/design-patterns/state',
+    'https://developero.io/blog/jest-mock-module-function-class-promises-axios-y-mas'
+  );
+   
 });
 
 
-describe("Las sesiones en Assigment", () =>{
-    it("puede asignar un artículo a un revisor",()=>{
-    //   user_first.add_role('Chair');
-    //   regularSessionType.add_reviewer(user_fifth); 
-    //   user_first.assign_article_to_reviewer(regularArticle, user_fifth);
-    //   expect(regularArticle.count_pending_reviewers()).not.toBe(0);
-    })
+describe("En la etapa de Asignacion, las sesiones", () =>{
+  it('deberia proceder de Recepcion a Bidding y de Bidding a Asignación de forma correcta', () => {
+    expect(posterSessionType.session_name_state()).toBe('Asignacion');
+  });
+
+  it("no se aceptan mas articulos",()=>{
+    let invalideted = ()=>{posterSessionType.receive_article(posterArticle, shippingDate)};
+    expect(invalideted).toThrow();
   })
+
+  it("asigno solo 3 revisores para cada articulo (Interesado, Interesado, Quizas)",()=>{
+   
+    posterSessionType.add_article_to_list(posterArticle)
+    posterSessionType.add_reviewer(userFirst); 
+    posterSessionType.add_reviewer(userFourth); 
+    posterSessionType.add_reviewer(userSecond); 
+    posterSessionType.add_reviewer(userThird); 
+
+    posterArticle.process_assign_bid('Interesado', userFirst);
+    posterArticle.process_assign_bid('Interesado', userSecond);
+    posterArticle.process_assign_bid('Quizas', userThird);
+    posterArticle.process_assign_bid('No interesado', userFourth);
+
+    posterSessionType.assign_reviewers_to_article();
+    expect(posterArticle.count_confirmed_reviewers_article()).toBe(3);
+    expect(posterArticle.count_interesteds()).toBe(2);
+    expect(posterArticle.count_maybes()).toBe(1);
+  })
+
+})

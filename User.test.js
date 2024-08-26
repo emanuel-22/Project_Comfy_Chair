@@ -10,11 +10,17 @@ jest.mock('./RegularArticle');
 jest.mock('./Session');
 jest.mock('./RegularSession');
 
+let firstDate, firstHour, secondDate, secondHour;
 
 beforeEach( ()=> {
   timestamp = Date.now();
   date = new Date(timestamp);
   date_finally = date.toISOString().split('T')[0];
+
+  firstDate = new Date(2023, 5, 12);
+  firstHour = new Date().setHours(9, 0, 0, 0);
+  secondDate = new Date(2023, 6, 18);
+  secondHour = new Date().setHours(18, 0, 0, 0);
 
   userFirst = new User('Barboza', 'Emanuel', 'UNSa', 'emanuelbarboza5@gmail.com', 'asdasd');
   userSecond = new User('Mendez', 'Maria', 'UNSa', 'mendezmaria@gmail.com', 'asdasd');
@@ -51,17 +57,31 @@ describe("Un usuario de la ComfyChair ", ()=>{
   })
 
   it("sin rol Chair, no puede crear una conferencia",()=>{
-    const firstDate = new Date(2023, 5, 12);
-    const firstHour = new Date().setHours(9, 0, 0, 0);
-    const secondDate = new Date(2023, 6, 18);
-    const secondHour = new Date().setHours(18, 0, 0, 0);
     expect(() => {
       userFirst.create_conference('IA International', 
-        firstDate.toISOString().split('T')[0], firstHour.toTimeString().split(' ')[0], 
-        secondDate.toISOString().split('T')[0], secondHour.toTimeString().split(' ')[0]
+        firstDate.toISOString().split('T')[0], firstHour, 
+        secondDate.toISOString().split('T')[0], secondHour
       );
     }).toThrow();
   })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   it("sin rol Autor, no puede enviar articulos",()=>{
     expect(() => {

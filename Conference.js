@@ -11,6 +11,7 @@ class Conference {
     this._to_date = to_date;
     this._from_hours = from_hours;
     this._to_hours = to_hours;
+    
     this._sessions = [];
     this._chairs = [];
     this._program_committee = [];
@@ -45,7 +46,7 @@ class Conference {
       session => (session._topic_name === session_name && session._session_type._name === type_session)
     );
   }
-
+  
   add_session(session_name, type_session, reception_deadline){
     let error_message = '';
     if(this.has_session(session_name, type_session)){
@@ -63,16 +64,15 @@ class Conference {
   }
 
   has_chair(user){
-    return this._chairs.some(
-      chair => (chair===user) 
-    );
+    return this._chairs.some(chair => chair && (chair.user()===user));
   }
 
-  add_chairs(chair){
-    if(!this.has_chair(chair)){
-      if(!chair.has_role('Chair')){
-        chair.add_role('Chair')
+  add_chairs(user){
+    if(!this.has_chair(user)){
+      if(!user.has_role('Chair')){
+        user.add_role('Chair')
       }
+      const chair = user.find_role('Chair')
       this._chairs.push(chair);
     }else{
       throw new Error('Este usuario ya se encuentra en la lista de chairs de la conferencia');
@@ -80,16 +80,15 @@ class Conference {
   }
 
   has_reviewer(user){
-    return this._program_committee.some(
-      reviewer => (reviewer===user) 
-    );
+    return this._program_committee.some(reviewer => reviewer && (reviewer.user()===user));
   }
 
-  add_program_committee(reviewer){
-    if(!this.has_reviewer(reviewer)){
-      if(!reviewer.has_role('Revisor')){
-        reviewer.add_role('Revisor')
+  add_program_committee(user){
+    if(!this.has_reviewer(user)){
+      if(!user.has_role('Revisor')){
+        user.add_role('Revisor')
       }
+      const reviewer = user.find_role('Revisor')
       this._program_committee.push(reviewer);
     }else{
       throw new Error('Este usuario ya se encuentra en el comité del programa de la conferencia');

@@ -4,7 +4,15 @@ const Role = require('./Role.js');
 class Author extends Role {
 
   constructor(user) {
-    super('Autor', user);
+    super(user);
+  }
+  
+  user(){
+    return this._user;
+  }
+
+  name(){
+    return 'Autor';
   }
   
   send_article(article, session, send_date){
@@ -12,6 +20,9 @@ class Author extends Role {
     session.receive_article(article, send_date)
   }
 
+
+
+  
 }
 
 module.exports = Author;

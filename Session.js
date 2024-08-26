@@ -2,15 +2,16 @@ const Reception = require('./Reception.js');
 
 class Session {
 
-  constructor(topic_name, session_type, reception_deadline, selection_method) {
+  constructor(topic_name, session_type, reception_deadline) {
     this._topic_name = topic_name;
     this._session_state = new Reception(this, reception_deadline); // Patron State para manejo de estados por lo que pasa una sesion
     this._session_type = session_type; // Patron Strategy para manejo de tipo de sesion (RegularSession, Workshop y PosterSession)
+    this._count_reviews = 0;
+    this._selection_method = null;
+    this._num_max_accepted = 0;
+
     this._articles = [];
     this._reviewers = [];
-    this._count_reviews = 0;
-    this._selection_method = selection_method;
-    this._num_max_accepted = 0;
   }
 
   set_state(state) {
@@ -27,6 +28,10 @@ class Session {
 
   session_type(){
     return this._session_type
+  }
+
+  session_name_state(){
+    return this._session_state.name_state();
   }
 
   articles(){
@@ -52,6 +57,10 @@ class Session {
 
   receive_article(article, send_date) {
     this._session_state.add_article(article, send_date);
+  }
+
+  has_article(some_article){
+    return this._articles.some(article => article===some_article);
   }
 
   // ---------------------------------Bidding------------------------------------
@@ -82,15 +91,6 @@ class Session {
       throw new Error('Este usuario ya es revisor de esta Sesion');
     }
   }
-
-  assign_reviewer_to_bid(article, reviewer){
-    if (this.find_email(reviewer)) {
-      article.process_add_to_pending(reviewer);
-    }else{
-      throw new Error('Este usuario no es revisor de esta Sesion');
-    }
-  }
-  
 
   send_articles_randomly(){
     let error_message = '';
@@ -136,6 +136,56 @@ class Session {
     }
   }
 
+  assign_reviewer_to_bid(article, reviewer){
+    if (this.find_email(reviewer)) {
+      article.process_add_to_pending(reviewer);
+    }else{
+      throw new Error('Este usuario no es revisor de esta Sesion');
+    }
+  }
+
+  // ---------------------------------Asignación------------------------------------
+  assign_reviewers_to_article(){
+    this._articles.forEach(article => {
+      this._session_state.assign_reviewers(article);
+    });
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+ 
+
 
 
 
@@ -163,11 +213,7 @@ class Session {
   
  
 
-  assign_reviewers_to_article(){
-    this._articles.forEach(article => {
-      this._session_state.assign_reviewers(article);
-    });
-  }
+  
 
   receive_score(article, score, user, text){
     if(!this.find_article(article)){
@@ -182,7 +228,7 @@ class Session {
     if (error_message) {
       throw new Error(error_message.trim());
     }else{
-      this._session_state.assign_score(article, score, user, text);
+      this._session_state.assign_score(article, user, score, text);
     }
   }
 

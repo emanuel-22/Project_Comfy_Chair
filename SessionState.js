@@ -5,6 +5,10 @@ class SessionState {
     this._session = session;
   }
 
+  name_state(){
+    throw new Error("Este metodo esta empleado en las subclases");
+  }
+
   next_state() {
     throw new Error("Este metodo esta empleado en las subclases");
   }

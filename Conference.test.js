@@ -4,13 +4,10 @@ const RegularSession = require('./RegularSession');
 const PosterSession = require('./PosterSession');
 const WorkshopSession = require('./WorkshopSession');
 const User = require('./User');
-const Chair = require('./Chair');
-
 
 let conference, sessionRegular, sessionSecond, sessionPoster, sessionWorkshop, userFirst;
 
 //jest.mock('./User');
-
 
 beforeEach( ()=> {
   // Usamos la fecha actual como fecha de recepción
@@ -62,17 +59,10 @@ describe("Una conferencia ", ()=>{
     }).toThrow();
   })
 
-  it("no puede crear la misma sesión dos veces",()=>{
-    expect(() => {
-      conference.add_session('Agentes y Sistemas Inteligentes', 'Sesion Regular', deadline);
-      conference.add_session('Agentes y Sistemas Inteligentes', 'Sesion Regular', deadline);
-    }).toThrow();
-  })
-
-  it("no puede crear una session de otro tipo que no sea regular, poster, workshop",()=>{
-    expect(() => {
-      conference.add_session('Agentes y Sistemas Inteligentes', 'Otra Sesion', deadline);
-    }).toThrow();
+  it("no puede crear la misma sesión dos veces (mismo nombre y tipo de sesión)",()=>{
+    conference.add_session('Agentes y Sistemas Inteligentes', 'Sesion Regular', deadline);
+    let duplicated_some = () => {conference.add_session('Agentes y Sistemas Inteligentes', 'Sesion Regular', deadline)};
+    expect(duplicated_some).toThrow();
   })
 
   it("no permitir agregar el mismo usuario 2 veces a la lista de chairs",()=>{
@@ -81,15 +71,15 @@ describe("Una conferencia ", ()=>{
     expect(add_some_user).toThrow();
   })
 
+  it("cuando agregamos un usuario a la lista de chairs, se debe agregar el rol de Chair",()=>{
+    conference.add_chairs(userFirst)
+    expect(userFirst.has_role('Chair')).toBe(true);
+  })
+
   it("no permitir agregar el mismo usuario 2 veces al comité de programa",()=>{
     conference.add_program_committee(userFirst)
     let add_some_user = ()=>{conference.add_program_committee(userFirst)};
     expect(add_some_user).toThrow();
-  })
-
-  it("cuando agregamos un usuario a la lista de chairs, se debe agregar el rol de Chair",()=>{
-    conference.add_chairs(userFirst)
-    expect(userFirst.has_role('Chair')).toBe(true);
   })
 
   it("cuando agregamos un usuario al comité de programa, se debe agregar el rol de Revisor",()=>{

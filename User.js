@@ -32,11 +32,11 @@ class User {
   }
 
   has_role(role_name) {
-    return this._roles.some(role => role._name === role_name);
+    return this._roles.some(role => role && role.name() === role_name);
   }
 
   find_role(roleName){
-    return this._roles.find(role => role._name === roleName);
+    return this._roles.find(role => role && role.name() === roleName);
   }
 
   add_role(role_name){
@@ -64,21 +64,21 @@ class User {
     }
   }
 
-  assign_article_to_reviewer(article, session, reviewer){
-    var chairRole = this.find_role('Chair')
-    if (chairRole){
-      chairRole.send_article_to_review(article, session, reviewer)
-    }else{
-      throw new Error('El usuario no tiene permisos de Chair para asignar articulos para revisión');
-    }
-  }
-
   send_article(article, session, send_date){
     var author_role = this.find_role('Autor')
     if (author_role) {
       author_role.send_article(article, session, send_date)
     }else{
       throw new Error('El usuario no tiene permisos de Autor para mandar articulos a la sesion');
+    }
+  }
+
+  assign_article_to_reviewer(article, session, reviewer){
+    var chairRole = this.find_role('Chair')
+    if (chairRole){
+      chairRole.send_article_to_review(article, session, reviewer)
+    }else{
+      throw new Error('El usuario no tiene permisos de Chair para asignar articulos para revisión');
     }
   }
 
@@ -90,6 +90,34 @@ class User {
       throw new Error('El usuario no tiene permisos de Revisor para enviar bids');
     }
   }
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+ 
 
   send_score(article, session, score, text){
     var reviewer_role = this.find_role('Revisor')

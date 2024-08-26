@@ -4,7 +4,11 @@ const Role = require('./Role.js');
 class Chair extends Role {
 
   constructor(user) {
-    super('Chair', user);
+    super(user);
+  }
+
+  name(){
+    return 'Chair';
   }
   
   create_conference(name, from_date, from_hour, to_date, to_hour){
@@ -20,12 +24,26 @@ class Chair extends Role {
     } 
   }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
   define_num_max_accepted(session, num){
     session.define_num_max_accepted(num);
   }
-
-
-
 }
 
 module.exports = Chair;

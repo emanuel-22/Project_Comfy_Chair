@@ -6,9 +6,13 @@ class Bidding extends SessionState {
   constructor(session) {
     super(session);
   }
+
+  name_state(){
+    return 'Bidding'
+  }
   
   next_state() {
-    this._session.set_state(new Assignment());
+    this._session.set_state(new Assignment(this._session));
   }
 
   add_article(article, send_date) {

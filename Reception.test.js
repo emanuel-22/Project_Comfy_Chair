@@ -22,6 +22,8 @@ beforeEach( ()=> {
   userFirst = new User('Emanuel', 'Barboza', 'UNSa', 'emanuel@gmail.com', 'asdasd');
   userFirst.add_role('Autor');
 
+  userSecond = new User('Daniel', 'Benvidez', 'UNCU', 'danimelli@gmail.com', 'asdasd');
+
   //-------------------------------- Articulos Regulares----------------------------------------
   regularArticle = new RegularArticle(
     'IT Project Failures, Causes and Cures', 
@@ -150,25 +152,31 @@ describe("Las sesiones de posters", ()=>{
     expect(send_regular_article).toThrow();
   })
 
-  it("no admiten articulos de tipo poster sin autores",()=>{
-    let invalidet_article = ()=>{posterSessionType.receive_article(posterArticle, shippingDate)};
-    expect(invalidet_article).toThrow();
-  })
-
   it("no admiten articulos de tipo poster sin titulos",()=>{
     posterInvalidated.add_author(userFirst);
     let invalidet_article = ()=>{posterSessionType.receive_article(posterInvalidated, shippingDate)};
     expect(invalidet_article).toThrow();
   })
 
+  it("no admiten articulos de tipo poster sin autores",()=>{
+    let invalidet_article = ()=>{posterSessionType.receive_article(posterArticle, shippingDate)};
+    expect(invalidet_article).toThrow();
+  })
+
 })
 
-describe("En la etapa de recepcion", ()=>{
+describe("En la etapa de recepción", ()=>{
   it("un autor, puede enviar un articulo a una session",()=>{
-    expect(() => {
-      regularArticle.add_author(userFirst)
-      userFirst.send_article(regularArticle, regularSessionType, shippingDate)
-    }).not.toThrow();
+    regularArticle.add_author(userFirst)
+    userFirst.send_article(regularArticle, regularSessionType, shippingDate)
+    expect(regularSessionType.has_article(regularArticle)).toBe(true);
+  })
+
+  it("un usuario solo con rol revisor y chair, no puede enviar un articulo a una session",()=>{
+    userSecond.add_role('Revisor');
+    userSecond.add_role('Chair');
+    let invalidate_function = ()=>{userSecond.send_article(regularArticle, regularSessionType, shippingDate)};
+    expect(invalidate_function).toThrow();
   })
 
   it("la fecha de envío de un articulo debe ser menor a la fecha de deadline de la session",()=>{

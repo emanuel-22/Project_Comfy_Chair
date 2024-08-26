@@ -7,8 +7,12 @@ class Assignment extends SessionState {
     super(session);
   }
 
+  name_state(){
+    return 'Asignacion'
+  }
+
   next_state() {
-    this._session.set_state(new Revision());
+    this._session.set_state(new Revision(this._session));
   }
 
   add_article(article, send_date) {

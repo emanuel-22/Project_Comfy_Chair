@@ -29,6 +29,9 @@ class ReviewerArticle {
     this._text_review = text
   }
 
+  set_status_assigned(){
+    this._status_assigned = true;
+  }
  
   
   }
