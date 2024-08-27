@@ -47,6 +47,7 @@ class Session {
   }
 
   // ---------------------------------Reception------------------------------------
+  
   is_accepted(article) {
     return this._session_type.is_accepted(article);
   }
@@ -64,6 +65,7 @@ class Session {
   }
 
   // ---------------------------------Bidding------------------------------------
+
   reviewers(){
     return this._reviewers
   }
@@ -145,77 +147,21 @@ class Session {
   }
 
   // ---------------------------------Asignación------------------------------------
+
   assign_reviewers_to_article(){
     this._articles.forEach(article => {
       this._session_state.assign_reviewers(article);
     });
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-  
-
- 
-
-
-
-
-
-
-
-
-
-
+  // ---------------------------------Revisión------------------------------------
 
   find_article(some_article){
     return this._articles.some(article => article._title === some_article._title);
   }
 
-
-  
-
- 
-
-  
- 
-
- 
-
-  
- 
-
-  
-
-  receive_score(article, score, user, text){
+  receive_score(article, user, score, text_review){
+    let error_message = '';
     if(!this.find_article(article)){
       error_message = 'Este articulo no fue aceptado en la recepción'
     }
@@ -228,18 +174,11 @@ class Session {
     if (error_message) {
       throw new Error(error_message.trim());
     }else{
-      this._session_state.assign_score(article, user, score, text);
+      this._session_state.assign_score(article, user, score, text_review);
     }
   }
 
-  define_num_max_accepted(num){
-    this._num_max_accepted = num;
-  }
-
-  num_max_accepted(){
-    return this._num_max_accepted;
-  }
-  
+  // ---------------------------------Selección------------------------------------
 
   set_selection_method(selection_method){
     this._selection_method = selection_method;
@@ -249,6 +188,13 @@ class Session {
     return this._selection_method.select(this._articles);
   }
 
+  define_num_max_accepted(num){
+    this._num_max_accepted = num;
+  }
+
+  num_max_accepted(){
+    return this._num_max_accepted;
+  }
 }
 
 module.exports = Session;

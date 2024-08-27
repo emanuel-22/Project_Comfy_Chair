@@ -64,7 +64,6 @@ class Article {
   }
 
   process_add_to_pending(user){
-
     if (!this.has_user_in_list_reviewer(user)){
       const new_reviewer = new ReviewerArticle(user);
       this.set_reviewers_article(new_reviewer);
@@ -134,7 +133,6 @@ class Article {
   }
 
   process_assign_reviewers(){
-
     let reviewersToAssign = this.interesteds().slice(0, 3);
 
     if (reviewersToAssign.length < 3) {
@@ -154,10 +152,20 @@ class Article {
     });
   }
 
+  reviewers_article(){
+    return this._reviewers_article;
+  }
+
+  //---------Estos son los revisores confirmados--------------
+
   confirmed_reviewers_article(){
     return this._reviewers_article.filter(
       reviewerArticle => reviewerArticle._status_assigned === true
     );
+  }
+
+  count_confirmed_reviewers_article(){
+    return this.confirmed_reviewers_article().length;
   }
 
   confirmed_user_reviewers(){
@@ -166,66 +174,71 @@ class Article {
     ); 
   }
 
-  reviewers_article(){
-    return this._reviewers_article;
+  confirmed_score_reviewers(){
+    return this.confirmed_reviewers_article().map(
+      reviewerArticle => reviewerArticle.score() 
+    ); 
   }
 
-  count_confirmed_reviewers_article(){
-    return this._reviewers_article.filter(
-      reviewerArticle => reviewerArticle && reviewerArticle._status_assigned===true
-    ).length;
+  confirmed_text_review_reviewers(){
+    return this.confirmed_reviewers_article().map(
+      reviewerArticle => reviewerArticle.text_review() 
+    ); 
   }
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-  
-
- 
-
- 
-
- 
-
- 
-  
-
-  
- 
 
   find_in_confirmed_reviewer(user){
-    return this.confirmed_reviewers_article().find(reviewArticle => reviewArticle._reviewer === user);
+    return this.confirmed_reviewers_article().find(
+      reviewArticle => (reviewArticle && reviewArticle.status_assigned()===true && reviewArticle.reviewer()===user)
+    );
   }
 
   process_score(user, score, text_review){
-    const review_article = find_in_confirmed_reviewer(user)
+    const review_article = this.find_in_confirmed_reviewer(user)
     if (review_article){
       review_article.asign_score(score, text_review);
     }else{
       throw new Error('Este revisor no esta confirmado para revisar este artículo');
     }
   }
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+ 
+
+ 
+
+ 
+
+ 
+  
+
+  
+ 
+
 
 
   calculate_average_score(){

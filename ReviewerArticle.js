@@ -7,12 +7,16 @@ class ReviewerArticle {
     this._bid = '';
 
     this._status_assigned = false; // false es porque no fue asignado en este articulo y true es porque es un revisor asignado
-    this._score = -4; //fuera del rango
+    this._score = ''; //fuera del rango
     this._text_review = '';
   }
 
   reviewer(){
     return this._reviewer;
+  }
+
+  score(){
+    return this._score;
   }
 
   reviewer_email(){
@@ -31,6 +35,14 @@ class ReviewerArticle {
 
   set_status_assigned(){
     this._status_assigned = true;
+  }
+
+  status_assigned(){
+    return this._status_assigned;
+  }
+
+  text_review(){
+    return this._text_review;
   }
  
   

@@ -2,6 +2,7 @@ const SelectionMethod = require("./SelectionMethod");
 
 
 class FixedCutMethod extends SelectionMethod {
+  
   constructor(percentage) {
     super();
     this._percentage = validated_percentage(percentage);

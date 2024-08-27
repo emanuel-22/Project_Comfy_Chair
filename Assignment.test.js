@@ -26,7 +26,6 @@ beforeEach(async ()=> {
     'https://refactoring.guru/design-patterns/state',
     'https://developero.io/blog/jest-mock-module-function-class-promises-axios-y-mas'
   );
-   
 });
 
 
@@ -38,25 +37,75 @@ describe("En la etapa de Asignacion, las sesiones", () =>{
   it("no se aceptan mas articulos",()=>{
     let invalideted = ()=>{posterSessionType.receive_article(posterArticle, shippingDate)};
     expect(invalideted).toThrow();
-  })
+  });
 
   it("asigno solo 3 revisores para cada articulo (Interesado, Interesado, Quizas)",()=>{
-   
     posterSessionType.add_article_to_list(posterArticle)
     posterSessionType.add_reviewer(userFirst); 
     posterSessionType.add_reviewer(userFourth); 
     posterSessionType.add_reviewer(userSecond); 
     posterSessionType.add_reviewer(userThird); 
-
     posterArticle.process_assign_bid('Interesado', userFirst);
     posterArticle.process_assign_bid('Interesado', userSecond);
     posterArticle.process_assign_bid('Quizas', userThird);
     posterArticle.process_assign_bid('No interesado', userFourth);
-
     posterSessionType.assign_reviewers_to_article();
     expect(posterArticle.count_confirmed_reviewers_article()).toBe(3);
     expect(posterArticle.count_interesteds()).toBe(2);
     expect(posterArticle.count_maybes()).toBe(1);
-  })
+    expect(posterArticle.count_not_interesteds()).toBe(1);
+  });
+
+  it("asigno solo 3 revisores para cada articulo (Interesado, Interesado, Interesado)",()=>{
+    posterSessionType.add_article_to_list(posterArticle)
+    posterSessionType.add_reviewer(userFirst); 
+    posterSessionType.add_reviewer(userFourth); 
+    posterSessionType.add_reviewer(userSecond); 
+    posterSessionType.add_reviewer(userThird); 
+    posterArticle.process_assign_bid('Interesado', userFirst);
+    posterArticle.process_assign_bid('Interesado', userSecond);
+    posterArticle.process_assign_bid('Interesado', userThird);
+    posterArticle.process_assign_bid('No interesado', userFourth);
+    posterSessionType.assign_reviewers_to_article();
+    expect(posterArticle.count_confirmed_reviewers_article()).toBe(3);
+    expect(posterArticle.count_interesteds()).toBe(3);
+    expect(posterArticle.count_maybes()).toBe(0);
+    expect(posterArticle.count_not_interesteds()).toBe(1);
+  });
+
+  it("asigno solo 3 revisores para cada articulo (Quizas, No interesado,  No interesado)",()=>{
+    posterSessionType.add_article_to_list(posterArticle)
+    posterSessionType.add_reviewer(userFirst); 
+    posterSessionType.add_reviewer(userFourth); 
+    posterSessionType.add_reviewer(userSecond); 
+    posterSessionType.add_reviewer(userThird); 
+    posterArticle.process_assign_bid('Quizas', userFirst);
+    posterArticle.process_assign_bid('No interesado', userSecond);
+    posterArticle.process_assign_bid('No interesado', userThird);
+    posterArticle.process_assign_bid('No interesado', userFourth);
+    posterSessionType.assign_reviewers_to_article();
+    expect(posterArticle.count_confirmed_reviewers_article()).toBe(3);
+    expect(posterArticle.count_interesteds()).toBe(0);
+    expect(posterArticle.count_maybes()).toBe(1);
+    expect(posterArticle.count_not_interesteds()).toBe(3);
+  });
+
+  it("asigno solo 3 revisores para cada articulo (Quizas, Quizas,  Quizas)",()=>{
+    posterSessionType.add_article_to_list(posterArticle)
+    posterSessionType.add_reviewer(userFirst); 
+    posterSessionType.add_reviewer(userFourth); 
+    posterSessionType.add_reviewer(userSecond); 
+    posterSessionType.add_reviewer(userThird); 
+    posterArticle.process_assign_bid('Quizas', userFirst);
+    posterArticle.process_assign_bid('Quizas', userSecond);
+    posterArticle.process_assign_bid('Quizas', userThird);
+    posterArticle.process_assign_bid('No interesado', userFourth);
+    posterSessionType.assign_reviewers_to_article();
+    expect(posterArticle.count_confirmed_reviewers_article()).toBe(3);
+    expect(posterArticle.count_interesteds()).toBe(0);
+    expect(posterArticle.count_maybes()).toBe(3);
+    expect(posterArticle.count_not_interesteds()).toBe(1);
+  });
+  
 
 })
