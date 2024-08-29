@@ -15,6 +15,10 @@ class ReviewerArticle {
     return this._reviewer;
   }
 
+  bid(){
+    return this._bid;
+  }
+
   score(){
     return this._score;
   }

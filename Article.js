@@ -160,7 +160,7 @@ class Article {
 
   confirmed_reviewers_article(){
     return this._reviewers_article.filter(
-      reviewerArticle => reviewerArticle._status_assigned === true
+      reviewerArticle => reviewerArticle._status_assigned===true
     );
   }
 
@@ -201,55 +201,10 @@ class Article {
     }
   }
 
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-  
-
- 
-
- 
-
- 
-
- 
-  
-
-  
- 
-
-
-
   calculate_average_score(){
     const total_score = this.confirmed_reviewers_article().reduce((sum, review_article)=>sum+(review_article._score || 0));
     this._average_score = this.confirmed_reviewers_article().length ? total_score / this._review_article.length : 0;
   }
-
-
-
-
-
 }
 
 module.exports = Article;

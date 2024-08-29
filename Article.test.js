@@ -10,6 +10,7 @@ beforeEach( ()=> {
   userFirst = new User('Barboza', 'Laura', 'UNSa', 'barbozalau@gmail.com', 'asdasd');
   userSecond = new User('Martinez', 'Maria', 'UBA', 'mamaria@gmail.com', 'asdasd');
   userThird = new User('Barranco', 'Pablo', 'UNJu', 'pbarranco@gmail.com', 'asdasd');
+  userFourth = new User('Abregu', 'Lucas', 'UNSa', 'luabregu@gmail.com', 'asdasd');
 
   regularArticle = new RegularArticle(
     'IT Project Failures, Causes and Cures', 
@@ -21,6 +22,96 @@ beforeEach( ()=> {
     'https://refactoring.guru/design-patterns/state',
     'https://refactoring.guru/design-patterns/state'
   );
+
+  users = [ userFirst, userSecond, userThird, userFourth ];
+
+});
+
+describe("Un articulo regular o poster", ()=>{
+  it("debe mostrar un error si se intenta enviar un artículo a un revisor duplicado",()=>{
+    regularArticle.process_add_to_pending(userFirst);
+    expect(() => regularArticle.process_add_to_pending(userFirst)).toThrow();
+  });
+
+  it("debe asignar correctamente el bid a un revisor", () => {
+    regularArticle.process_add_to_pending(userFirst);
+    regularArticle.process_assign_bid('Interesado', userFirst);
+    const reviewerArticle = regularArticle.find_user_in_list_reviewer(userFirst);
+    expect(reviewerArticle.bid()).toBe('Interesado');
+  });
+
+  it("mostrar error si el bid no es válido", () => {
+    regularArticle.process_add_to_pending(userFirst);
+    expect(() => article.process_assign_bid('Invalido', userFirst)).toThrow();
+  });
+
+  it("debería asignar revisores 'interesados'", () => {
+    users.forEach(user => posterArticle.process_add_to_pending(user));
+    posterArticle.process_assign_bid('Interesado', users[0]);
+    posterArticle.process_assign_bid('Interesado', users[1]);
+    posterArticle.process_assign_bid('Interesado', users[2]);
+    posterArticle.process_assign_reviewers();
+    expect(posterArticle.count_confirmed_reviewers_article()).toBe(3);
+    expect(posterArticle.count_interesteds()).toBe(3);
+    expect(posterArticle.count_maybes()).toBe(0);
+    expect(posterArticle.count_not_interesteds()).toBe(0);
+  });
+
+  it("debería asignar revisores 'quizas', si hay menos de 3 interesados", () => {
+    users.forEach(user => posterArticle.process_add_to_pending(user));
+    posterArticle.process_assign_bid('Interesado', users[0]);
+    posterArticle.process_assign_bid('Quizas', users[1]);
+    posterArticle.process_assign_bid('Quizas', users[2]);
+    posterArticle.process_assign_reviewers();
+    expect(posterArticle.count_confirmed_reviewers_article()).toBe(3);
+    expect(posterArticle.count_interesteds()).toBe(1);
+    expect(posterArticle.count_maybes()).toBe(2);
+    expect(posterArticle.count_not_interesteds()).toBe(0);
+  });
+
+  it("debería asignar revisores 'no interesado', si hay menos de 3 interesados y quizas", () => {
+    users.forEach(user => posterArticle.process_add_to_pending(user));
+    posterArticle.process_assign_bid('No interesado', users[0]);
+    posterArticle.process_assign_bid('Quizas', users[1]);
+    posterArticle.process_assign_bid('Quizas', users[2]);
+    posterArticle.process_assign_reviewers();
+    expect(posterArticle.count_confirmed_reviewers_article()).toBe(3);
+    expect(posterArticle.count_interesteds()).toBe(0);
+    expect(posterArticle.count_maybes()).toBe(2);
+    expect(posterArticle.count_not_interesteds()).toBe(1);
+  });
+
+  it("debería asignar revisores 'no interesado', si hay menos de 3 interesados y quizas", () => {
+    users.forEach(user => posterArticle.process_add_to_pending(user));
+    posterArticle.process_assign_bid('No interesado', users[0]);
+    posterArticle.process_assign_bid('No interesado', users[1]);
+    posterArticle.process_assign_bid('Quizas', users[2]);
+    posterArticle.process_assign_reviewers();
+    expect(posterArticle.count_confirmed_reviewers_article()).toBe(3);
+    expect(posterArticle.count_interesteds()).toBe(0);
+    expect(posterArticle.count_maybes()).toBe(1);
+    expect(posterArticle.count_not_interesteds()).toBe(2);
+  });
+
+  it("debería asignar una puntuación valida a un revisor confirmado", () => {
+    posterArticle.process_add_to_pending(userFirst);
+    posterArticle.process_assign_bid('Interesado', userFirst);
+    posterArticle.process_assign_reviewers();
+    const reviewerArticle = posterArticle.find_in_confirmed_reviewer(userFirst);
+    reviewerArticle.set_status_assigned();
+    posterArticle.process_score(userFirst, 2, 'Me parece que este articulo es muy bueno...');
+    expect(reviewerArticle.score()).toBe(2);
+    expect(reviewerArticle.text_review()).toBe('Me parece que este articulo es muy bueno...');
+  });
+
+  it("debe mostrar un error si el revisor no está confirmado", () => {
+    posterArticle.process_add_to_pending(userFirst);
+    posterArticle.process_assign_bid('Interesado', userFirst);
+    console.log(posterArticle);
+    expect(() => {
+      posterArticle.process_score(userFirst, 2, 'Me parece que este articulo es muy bueno...');
+    }).toThrow();
+  });
 });
 
 describe("Un articulo regular", ()=>{

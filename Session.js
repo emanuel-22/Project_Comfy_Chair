@@ -6,11 +6,11 @@ class Session {
     this._topic_name = topic_name;
     this._session_state = new Reception(this, reception_deadline); // Patron State para manejo de estados por lo que pasa una sesion
     this._session_type = session_type; // Patron Strategy para manejo de tipo de sesion (RegularSession, Workshop y PosterSession)
-    this._count_reviews = 0;
     this._selection_method = null;
     this._num_max_accepted = 0;
 
     this._articles = [];
+    this._selected_articles = [];
     this._reviewers = [];
   }
 
@@ -75,7 +75,7 @@ class Session {
   }
 
   count_reviews(){
-    return this.count_articles()*3
+    return this.count_articles()*3;;
   }
 
   find_email(user){
@@ -185,7 +185,16 @@ class Session {
   }
 
   start_articles_select() {
-    return this._selection_method.select(this._articles);
+    if (this._num_max_accepted!=0) {
+      const selected_articles = this._selection_method.select(this._articles);
+      this._selected_articles = selected_articles.slice(0, this._num_max_accepted);
+    }else{
+      throw new Error('No esta definido el número máximo a aceptar de esta sesión');
+    }
+  }
+
+  selected_articles(){
+    return this._selected_articles;
   }
 
   define_num_max_accepted(num){

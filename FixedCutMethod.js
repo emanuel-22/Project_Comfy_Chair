@@ -5,7 +5,7 @@ class FixedCutMethod extends SelectionMethod {
   
   constructor(percentage) {
     super();
-    this._percentage = validated_percentage(percentage);
+    this._percentage = this.validated_percentage(percentage);
   }
 
   validated_percentage(percentage){

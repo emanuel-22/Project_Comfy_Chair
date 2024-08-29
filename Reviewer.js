@@ -10,18 +10,6 @@ class Reviewer extends Role{
     return 'Revisor';
   }
   
-
-
-
-
-
-
-
-
-
-
-
-  
   send_bids(article, session, bid){
     session.receive_bids(article, bid, this._user)
   }
