@@ -98,7 +98,7 @@ describe("Un articulo regular o poster", ()=>{
     posterArticle.process_assign_bid('Interesado', userFirst);
     posterArticle.process_assign_reviewers();
     const reviewerArticle = posterArticle.find_in_confirmed_reviewer(userFirst);
-    reviewerArticle.set_status_assigned();
+    reviewerArticle.change_true_status_assigned();
     posterArticle.process_score(userFirst, 2, 'Me parece que este articulo es muy bueno...');
     expect(reviewerArticle.score()).toBe(2);
     expect(reviewerArticle.text_review()).toBe('Me parece que este articulo es muy bueno...');

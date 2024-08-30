@@ -91,34 +91,6 @@ class User {
     }
   }
 
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
- 
-
   send_score(article, session, score, text){
     var reviewer_role = this.find_role('Revisor')
     if (reviewer_role) {

@@ -86,49 +86,51 @@ class Article {
         reviewer_article = new ReviewerArticle(user);
         this.set_reviewers_article(reviewer_article);
       }
+      // se cambia a personas que fueron asignadas el bid
       reviewer_article.set_bid(bid);
+      reviewer_article.change_true_status_bidding(); // pasamos a true
     }
   }
 
   count_pending_reviewers(){
     return this._reviewers_article.filter(
-      reviewerArticle => reviewerArticle._status_bidding===false
+      reviewerArticle => reviewerArticle.status_bidding()===false
     ).length;
   }
 
   interesteds(){
     return this._reviewers_article.filter(
-      reviewerArticle => reviewerArticle._bid === 'Interesado'
+      reviewerArticle => reviewerArticle.bid()==='Interesado'
     );
   }
 
   count_interesteds(){
     return this._reviewers_article.filter(
-      reviewerArticle => reviewerArticle._bid === 'Interesado'
+      reviewerArticle => reviewerArticle.bid()==='Interesado'
     ).length;
   }
 
   not_interesteds(){
     return this._reviewers_article.filter(
-      reviewerArticle => reviewerArticle._bid === 'No interesado'
+      reviewerArticle => reviewerArticle.bid()==='No interesado'
     );
   }
 
   count_not_interesteds(){
     return this._reviewers_article.filter(
-      reviewerArticle => reviewerArticle._bid === 'No interesado'
+      reviewerArticle => reviewerArticle.bid()==='No interesado'
     ).length;
   }
 
   maybes(){
     return this._reviewers_article.filter(
-      reviewerArticle => reviewerArticle._bid === 'Quizas'
+      reviewerArticle => reviewerArticle.bid()==='Quizas'
     );
   }
 
   count_maybes(){
     return this._reviewers_article.filter(
-      reviewerArticle => reviewerArticle._bid === 'Quizas'
+      reviewerArticle => reviewerArticle.bid()==='Quizas'
     ).length;
   }
 
@@ -148,7 +150,7 @@ class Article {
 
     reviewersToAssign.forEach((item) => {
       const reviewer_article = this._reviewers_article.find(r => r===item);
-      reviewer_article.set_status_assigned();
+      reviewer_article.change_true_status_assigned();
     });
   }
 
@@ -160,7 +162,7 @@ class Article {
 
   confirmed_reviewers_article(){
     return this._reviewers_article.filter(
-      reviewerArticle => reviewerArticle._status_assigned===true
+      reviewerArticle => reviewerArticle.status_assigned()===true
     );
   }
 
@@ -202,7 +204,9 @@ class Article {
   }
 
   calculate_average_score(){
-    const total_score = this.confirmed_reviewers_article().reduce((sum, review_article)=>sum+(review_article._score || 0));
+    const total_score = this.confirmed_reviewers_article().reduce(
+      (sum, review_article)=>sum+(review_article._score || 0)
+    );
     this._average_score = this.confirmed_reviewers_article().length ? total_score / this._review_article.length : 0;
   }
 }

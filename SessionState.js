@@ -29,6 +29,10 @@ class SessionState {
     throw new Error("Este metodo esta empleado en las subclases");
   }
 
+  start_articles_select(){
+    throw new Error("Este metodo esta empleado en las subclases");
+  }
+
 }
 
 module.exports = SessionState;

@@ -1,6 +1,4 @@
-const SelectionMethod = require("./SelectionMethod");
-
-
+const SelectionMethod = require("./SelectionMethod")
 class FixedCutMethod extends SelectionMethod {
   
   constructor(percentage) {

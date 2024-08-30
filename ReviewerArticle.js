@@ -23,13 +23,16 @@ class ReviewerArticle {
     return this._score;
   }
 
-  reviewer_email(){
-    return this._reviewer._email;
+  text_review(){
+    return this._text_review;
   }
 
-  set_bid(bid){
-    this._bid = bid;
-    this._status_bidding = true
+  status_bidding(){
+    return this._status_bidding;
+  }
+
+  status_assigned(){
+    return this._status_assigned;
   }
 
   asign_score(score, text){
@@ -37,19 +40,22 @@ class ReviewerArticle {
     this._text_review = text
   }
 
-  set_status_assigned(){
+  reviewer_email(){
+    return this._reviewer._email;
+  }
+
+  set_bid(bid){
+    this._bid = bid;
+  }
+
+  change_true_status_bidding(){
+    this._status_bidding = true;
+  }
+  
+  change_true_status_assigned(){
     this._status_assigned = true;
   }
 
-  status_assigned(){
-    return this._status_assigned;
-  }
+}
 
-  text_review(){
-    return this._text_review;
-  }
- 
-  
-  }
-  
-  module.exports = ReviewerArticle;
+module.exports = ReviewerArticle;
