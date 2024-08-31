@@ -43,7 +43,14 @@ class Session {
   }
 
   proceed() {
-    this._session_state.next_state();
+    this._session_state.proceed();
+  }
+
+  getDetails() {
+    console.log(`La Session: ${this._topic_name}`);
+    this._articles.forEach(
+      article => article.getDetails()
+    );
   }
 
   // ---------------------------------Reception------------------------------------
@@ -56,8 +63,8 @@ class Session {
     this._articles.push(article);
   }
 
-  receive_article(article, send_date) {
-    this._session_state.add_article(article, send_date);
+  receive_article(article, notification_author, send_date) {
+    this._session_state.add_article(article, notification_author, send_date);
   }
 
   has_article(some_article){
@@ -95,47 +102,11 @@ class Session {
   }
 
   send_articles_randomly(){
-    let error_message = '';
-    if (this.count_reviewers()==0){
-      error_message = 'La sesión no tiene revisores';
-    }
-    if (this.count_articles()==0){
-      error_message = 'La sesión no tiene articulos';
-    }
-    if (this.count_reviewers()<3){
-      error_message = 'La cantidad de revisores no satisface la cantidad de revisiones';
-    }
-    if (error_message) {
-      throw new Error(error_message.trim());
-    }else{
-      let copy_articles = this.articles();
-      let copy_reviewers = this.reviewers();
-      copy_articles.sort(() => Math.random() - 0.5);
-      copy_reviewers.sort(() => Math.random() - 0.5);
-
-      let start_index = 0;
-      let num_articles_to_assign = Math.floor(this.count_reviews() / this.count_reviewers());
-
-      for (let reviewerIndex = 0; reviewerIndex < this.count_reviewers(); reviewerIndex++) {
-        let reviewer = copy_reviewers[reviewerIndex];
-        let assigned_count = 0;
-        while (assigned_count < num_articles_to_assign) {
-          let articleIndex = (start_index + assigned_count) % this.count_articles();
-          let article = copy_articles[articleIndex];
-          article.process_add_to_pending(reviewer);
-          assigned_count++;
-        }
-        start_index = (start_index + num_articles_to_assign) % this.count_articles();
-      } 
-    }
+    this._session_state.send_articles_randomly();
   }
 
   receive_bids(article, bid, user){
-    if(this.find_article(article)){
-      this._session_state.assign_bids(article, bid, user);
-    }else{
-      throw new Error('Este articulo no fue aceptado en la recepción');
-    }
+    this._session_state.assign_bids(article, bid, user);
   }
 
   assign_reviewer_to_bid(article, reviewer){
@@ -149,9 +120,7 @@ class Session {
   // ---------------------------------Asignación------------------------------------
 
   assign_reviewers_to_article(){
-    this._articles.forEach(article => {
-      this._session_state.assign_reviewers(article);
-    });
+    this._session_state.assign_reviewers_to_article()
   }
 
   // ---------------------------------Revisión------------------------------------

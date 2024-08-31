@@ -67,29 +67,29 @@ describe("Las sesiones regulares", ()=>{
 
   it("solo admiten articulos de tipo regular",()=>{
     regularArticle.add_author(userFirst);
-    regularSessionType.receive_article(regularArticle, shippingDate);
+    regularSessionType.receive_article(regularArticle, userFirst, shippingDate);
     expect(regularSessionType.articles()).toContain(regularArticle);
   })
 
   it("no admiten posters",()=>{
-    let send_poster = ()=>{regularSessionType.receive_article(posterArticle, shippingDate)};
+    let send_poster = ()=>{regularSessionType.receive_article(posterArticle, userFirst, shippingDate)};
     expect(send_poster).toThrow();
   })
 
   it("no admiten articulos de tipo regular con asbtract de mas de 300 palabras",()=>{
     regularArticleInvalidated.add_author(userFirst);
-    let invalidet_article = ()=>{regularSessionType.receive_article(regularArticleInvalidated, shippingDate)};
+    let invalidet_article = ()=>{regularSessionType.receive_article(regularArticleInvalidated, userFirst, shippingDate)};
     expect(invalidet_article).toThrow();
   })
 
   it("no admiten articulos de tipo regular sin titulos",()=>{
     regularArticleInvalidated2.add_author(userFirst);
-    let invalidet_article = ()=>{regularSessionType.receive_article(regularArticleInvalidated2, shippingDate)};
+    let invalidet_article = ()=>{regularSessionType.receive_article(regularArticleInvalidated2, userFirst, shippingDate)};
     expect(invalidet_article).toThrow();
   })
 
   it("no admiten articulos de tipo regular sin autores",()=>{
-    let invalidet_article = ()=>{regularSessionType.receive_article(regularArticle, shippingDate)};
+    let invalidet_article = ()=>{regularSessionType.receive_article(regularArticle, userFirst, shippingDate)};
     expect(invalidet_article).toThrow();
   })
 
@@ -99,41 +99,41 @@ describe("Las sesiones de workshops", ()=>{
 
   it("admiten articulos de tipo regular",()=>{
     regularArticle.add_author(userFirst)
-    workshopSessionType.receive_article(regularArticle, shippingDate)
+    workshopSessionType.receive_article(regularArticle, userFirst, shippingDate)
     expect(workshopSessionType.articles()).toContain(regularArticle);
   })
 
   it("no admiten articulos de tipo regular con abstract de mas de 300 palabras",()=>{
     regularArticleInvalidated.add_author(userFirst);
-    let invalidet_article = ()=>{workshopSessionType.receive_article(regularArticleInvalidated, shippingDate)};
+    let invalidet_article = ()=>{workshopSessionType.receive_article(regularArticleInvalidated, userFirst, shippingDate)};
     expect(invalidet_article).toThrow();
   })
 
   it("no admiten articulos de tipo regular sin titulos",()=>{
     regularArticleInvalidated2.add_author(userFirst);
-    let invalidet_article = ()=>{workshopSessionType.receive_article(regularArticleInvalidated2, shippingDate)};
+    let invalidet_article = ()=>{workshopSessionType.receive_article(regularArticleInvalidated2, userFirst, shippingDate)};
     expect(invalidet_article).toThrow();
   })
 
   it("no admiten articulos de tipo regular sin autores",()=>{
-    let invalidet_article = ()=>{workshopSessionType.receive_article(regularArticle, shippingDate)};
+    let invalidet_article = ()=>{workshopSessionType.receive_article(regularArticle, userFirst, shippingDate)};
     expect(invalidet_article).toThrow();
   })
 
   it("admiten articulos de tipo posters",()=>{
     posterArticle.add_author(userFirst)
-    workshopSessionType.receive_article(posterArticle, shippingDate)
+    workshopSessionType.receive_article(posterArticle, userFirst, shippingDate)
     expect(workshopSessionType.articles()).toContain(posterArticle);
   })
 
   it("no admiten articulos de tipo poster sin autores",()=>{
-    let invalidet_article = ()=>{workshopSessionType.receive_article(posterArticle, shippingDate)};
+    let invalidet_article = ()=>{workshopSessionType.receive_article(posterArticle, userFirst, shippingDate)};
     expect(invalidet_article).toThrow();
   })
 
   it("no admiten articulos de tipo poster sin titulos",()=>{
     posterInvalidated.add_author(userFirst);
-    let invalidet_article = ()=>{workshopSessionType.receive_article(posterInvalidated, shippingDate)};
+    let invalidet_article = ()=>{workshopSessionType.receive_article(posterInvalidated, userFirst, shippingDate)};
     expect(invalidet_article).toThrow();
   })
 
@@ -143,18 +143,18 @@ describe("Las sesiones de posters", ()=>{
 
   it("admiten articulos de tipo poster",()=>{
     posterArticle.add_author(userFirst)
-    posterSessionType.receive_article(posterArticle, shippingDate)
+    posterSessionType.receive_article(posterArticle, userFirst, shippingDate)
     expect(posterSessionType.articles()).toContain(posterArticle);
   })
 
   it("no admiten articulos de tipo articulos regulares",()=>{
-    let send_regular_article = ()=>{posterSessionType.receive_article(regularArticle, shippingDate)};
+    let send_regular_article = ()=>{posterSessionType.receive_article(regularArticle, userFirst, shippingDate)};
     expect(send_regular_article).toThrow();
   })
 
   it("no admiten articulos de tipo poster sin titulos",()=>{
     posterInvalidated.add_author(userFirst);
-    let invalidet_article = ()=>{posterSessionType.receive_article(posterInvalidated, shippingDate)};
+    let invalidet_article = ()=>{posterSessionType.receive_article(posterInvalidated, userFirst, shippingDate)};
     expect(invalidet_article).toThrow();
   })
 
@@ -181,7 +181,7 @@ describe("En la etapa de recepción", ()=>{
 
   it("la fecha de envío de un articulo debe ser menor a la fecha de deadline de la session",()=>{
     regularArticle.add_author(userFirst);
-    let invalidet_article = ()=>{regularSessionType.receive_article(regularArticle, lateDate)};
+    let invalidet_article = ()=>{regularSessionType.receive_article(regularArticle, userFirst, lateDate)};
     expect(invalidet_article).toThrow();
   })
 })

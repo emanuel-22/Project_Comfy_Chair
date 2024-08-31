@@ -27,6 +27,10 @@ class Article {
     this._notification_author = author;
   }
 
+  notification_author(){
+    return this._notification_author;
+  }
+
   has_author(user){
     return this._authors.some(author => author && author.user() === user);
   }
@@ -209,6 +213,8 @@ class Article {
     );
     this._average_score = this.confirmed_reviewers_article().length ? total_score / this._review_article.length : 0;
   }
+
+  
 }
 
 module.exports = Article;

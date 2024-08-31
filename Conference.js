@@ -95,6 +95,10 @@ class Conference {
     }
   }
 
+  getDetails() {
+    this._sessions.forEach(session => session.getDetails());
+  }
+
   sessions(){
     return this._sessions;
   }
@@ -106,6 +110,8 @@ class Conference {
   program_committee(){
     return this._program_committee;
   }
+
+  
 
 }
 

@@ -16,8 +16,7 @@ class Author extends Role {
   }
   
   send_article(article, session, send_date){
-    article.set_notification_author(this._user);
-    session.receive_article(article, send_date);
+    session.receive_article(article, this._user, send_date);
   }
  
 }

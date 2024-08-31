@@ -107,7 +107,6 @@ describe("Un articulo regular o poster", ()=>{
   it("debe mostrar un error si el revisor no está confirmado", () => {
     posterArticle.process_add_to_pending(userFirst);
     posterArticle.process_assign_bid('Interesado', userFirst);
-    console.log(posterArticle);
     expect(() => {
       posterArticle.process_score(userFirst, 2, 'Me parece que este articulo es muy bueno...');
     }).toThrow();

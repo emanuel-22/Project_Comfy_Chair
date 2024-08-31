@@ -9,7 +9,7 @@ class SessionState {
     throw new Error("Este metodo esta empleado en las subclases");
   }
 
-  next_state() {
+  proceed() {
     throw new Error("Este metodo esta empleado en las subclases");
   }
 

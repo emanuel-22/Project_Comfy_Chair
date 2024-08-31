@@ -38,7 +38,7 @@ describe('En la etapa de Bidding, las sesiones', () => {
   });
 
   it("no acepta mas articulos",()=>{
-    let invalideted = ()=>{regularSessionType.receive_article(regularArticle, shippingDate)};
+    let invalideted = ()=>{regularSessionType.receive_article(regularArticle, userFirst, shippingDate)};
     expect(invalideted).toThrow();
   })
 

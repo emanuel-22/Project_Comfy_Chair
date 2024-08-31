@@ -34,7 +34,7 @@ describe("En la etapa de Revisión, las sesiones", () =>{
   });
 
   it("no se aceptan mas articulos",()=>{
-    let invalideted = ()=>{posterSessionType.receive_article(posterArticle, shippingDate)};
+    let invalideted = ()=>{posterSessionType.receive_article(posterArticle, userFirst, shippingDate)};
     expect(invalideted).toThrow();
   });
 

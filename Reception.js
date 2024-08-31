@@ -13,7 +13,7 @@ class Reception extends SessionState {
     return 'Recepción'
   }
 
-  next_state() {
+  proceed() {
     this._session.set_state(new Bidding(this._session));
   }
 
@@ -21,9 +21,11 @@ class Reception extends SessionState {
     return (send_date<=this._reception_deadline)
   }
 
-  add_article(article, send_date) {
+  add_article(article, notification_author, send_date) {
     if (this._session.is_accepted(article) && this.validated_dates(send_date)) {
-      this._session.add_article_to_list(article)
+      this._session.add_article_to_list(article);
+      article.set_notification_author(notification_author);
+      article.notification_author().receive_notification(this.name_state());
     } else {
       throw new Error('El articulo fue rechazado en esta Sesión');
     }

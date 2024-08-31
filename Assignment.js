@@ -11,7 +11,7 @@ class Assignment extends SessionState {
     return 'Asignacion'
   }
 
-  next_state() {
+  proceed() {
     this._session.set_state(new Revision(this._session));
   }
 
@@ -19,8 +19,10 @@ class Assignment extends SessionState {
     throw new Error('Durante esta instancia, ya no se aceptan mas articulos');
   }
 
-  assign_reviewers(article) {
-    article.process_assign_reviewers();
+  assign_reviewers_to_article(){
+    this._session._articles.forEach(article => {
+      article.process_assign_reviewers();
+    });
   }
   
 

@@ -16,6 +16,10 @@ class RegularArticle extends Article {
     return words.length<300;
   }
 
+  getDetails() {
+    console.log(`El articulo Regular: ${this._title}`);
+  }
+
   
 }
 

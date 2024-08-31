@@ -11,7 +11,7 @@ class Revision extends SessionState {
     return 'Revision'
   }
 
-  next_state() {
+  proceed() {
     this._session.set_state(new Selection(this._session));
   }
   

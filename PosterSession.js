@@ -12,6 +12,10 @@ class PosterSession extends SessionType {
   is_accepted(article) {
     return (this.validated_get_type(article) && this.validated_title(article) && this.validated_count_authors(article));
   }
+
+  getDetails() {
+    console.log(`El articulo Poster: ${this._title}`);
+  }
 }
 
 module.exports = PosterSession;

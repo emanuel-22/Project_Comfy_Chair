@@ -39,6 +39,10 @@ class User {
     return this._roles.find(role => role && role.name() === roleName);
   }
 
+  receive_notification(name_state){
+    console.log(`El articulo ${this._title} se encuentra en estado: ${name_state}`);
+  }
+
   add_role(role_name){
     let error_message = '';
     if(this.has_role(role_name)){
