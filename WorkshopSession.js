@@ -13,7 +13,7 @@ class WorkshopSession extends SessionType {
 
   is_accepted(article) {
     let type = article.get_type();
-    if (type==='regular'){
+    if (type==='Regular'){
       return (this.validated_title(article) && this.validated_count_authors(article) && this.validated_abstract(article));
     }else{
       return (this.validated_title(article) && this.validated_count_authors(article));

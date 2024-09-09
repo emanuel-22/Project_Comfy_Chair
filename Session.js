@@ -14,12 +14,16 @@ class Session {
     this._reviewers = [];
   }
 
-  set_state(state) {
+  set_session_state(state) {
     this._session_state = state;
   }
 
-  set_type_session(session_type) {
+  set_session_type(session_type) {
     this._session_type = session_type;
+  }
+
+  topic_name(){
+    return this._topic_name;
   }
 
   session_state(){
@@ -28,10 +32,6 @@ class Session {
 
   session_type(){
     return this._session_type
-  }
-
-  session_name_state(){
-    return this._session_state.name_state();
   }
 
   articles(){
@@ -46,10 +46,10 @@ class Session {
     this._session_state.proceed();
   }
 
-  getDetails() {
-    console.log(`La Session: ${this._topic_name}`);
+  get_details() {
+    console.log(`La Sesión: ${this._topic_name}`);
     this._articles.forEach(
-      article => article.getDetails()
+      article => article.get_details()
     );
   }
 

@@ -6,7 +6,7 @@ class PosterSession extends SessionType {
   }
 
   validated_get_type(article){
-    return article.get_type()==='poster';
+    return article.get_type()==='Poster';
   }
 
   is_accepted(article) {

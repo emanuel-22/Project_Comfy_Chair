@@ -12,7 +12,7 @@ class Revision extends SessionState {
   }
 
   proceed() {
-    this._session.set_state(new Selection(this._session));
+    this._session.set_session_state(new Selection(this._session));
   }
   
   add_article(article, send_date) {

@@ -12,7 +12,7 @@ class Assignment extends SessionState {
   }
 
   proceed() {
-    this._session.set_state(new Revision(this._session));
+    this._session.set_session_state(new Revision(this._session));
   }
 
   add_article(article, send_date) {

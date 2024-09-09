@@ -11,8 +11,8 @@ class Chair extends Role {
     return 'Chair';
   }
   
-  create_conference(name, from_date, from_hour, to_date, to_hour){
-    return new Conference(name, from_date, from_hour, to_date, to_hour);
+  create_conference(name, start_date, start_time, end_date, end_time){
+    return new Conference(name, start_date, start_time, end_date, end_time);
   }
 
   send_article_to_review(article, session, reviewer){

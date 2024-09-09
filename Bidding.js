@@ -12,7 +12,7 @@ class Bidding extends SessionState {
   }
   
   proceed() {
-    this._session.set_state(new Assignment(this._session));
+    this._session.set_session_state(new Assignment(this._session));
   }
 
   add_article(article, send_date) {

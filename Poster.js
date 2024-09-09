@@ -8,7 +8,11 @@ class Poster extends Article {
   }
 
   get_type() {
-    return 'poster';
+    return 'Poster';
+  }
+
+  get_details() {
+    console.log(`El Articulo Poster: ${this._title}`);
   }
 }
 

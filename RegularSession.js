@@ -7,7 +7,7 @@ class RegularSession extends SessionType {
   }
 
   validated_get_type(article){
-    return article.get_type()==='regular';
+    return article.get_type()==='Regular';
   }
 
   validated_abstract(article){

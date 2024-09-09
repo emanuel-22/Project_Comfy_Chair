@@ -8,7 +8,7 @@ class RegularArticle extends Article {
   }
 
   get_type() {
-    return 'regular';
+    return 'Regular';
   }
 
   validated_abstract(){
@@ -16,11 +16,10 @@ class RegularArticle extends Article {
     return words.length<300;
   }
 
-  getDetails() {
-    console.log(`El articulo Regular: ${this._title}`);
+  get_details() {
+    console.log(`El Articulo Regular: ${this._title}`);
   }
 
-  
 }
 
 module.exports = RegularArticle;

@@ -14,7 +14,7 @@ class Reception extends SessionState {
   }
 
   proceed() {
-    this._session.set_state(new Bidding(this._session));
+    this._session.set_session_state(new Bidding(this._session));
   }
 
   validated_dates(send_date){

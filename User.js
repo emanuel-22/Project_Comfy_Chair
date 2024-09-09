@@ -35,8 +35,8 @@ class User {
     return this._roles.some(role => role && role.name() === role_name);
   }
 
-  find_role(roleName){
-    return this._roles.find(role => role && role.name() === roleName);
+  find_role(role_name){
+    return this._roles.find(role => role && role.name() === role_name);
   }
 
   receive_notification(name_state){
@@ -59,10 +59,10 @@ class User {
     }
   }
 
-  create_conference(name, from_date, from_hour, to_date, to_hour){
+  create_conference(name, start_date, start_time, end_date, end_time){
     var chairRole = this.find_role('Chair')
     if (chairRole) {
-      chairRole.create_conference(name, from_date, from_hour, to_date, to_hour)
+      chairRole.create_conference(name, start_date, start_time, end_date, end_time)
     }else{
       throw new Error('El usuario no tiene permisos de Chair para crear conferencias');
     }

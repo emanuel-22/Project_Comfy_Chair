@@ -5,12 +5,12 @@ const Session = require('./Session.js');
 
 class Conference {
   
-  constructor(name, from_date, from_hours, to_date, to_hours) {
+  constructor(name, start_date, start_time, end_date, end_time) {
     this._name = name;
-    this._from_date = from_date;
-    this._to_date = to_date;
-    this._from_hours = from_hours;
-    this._to_hours = to_hours;
+    this._start_date = start_date;
+    this._start_time = start_time;
+    this._end_date = end_date;
+    this._end_time = end_time;
     
     this._sessions = [];
     this._chairs = [];
@@ -21,9 +21,33 @@ class Conference {
     return this._name;
   }
 
+  start_date(){
+    return this._start_date;
+  }
+
+  end_date(){
+    return this._end_date;
+  }
+
+  get_details() {
+    this._sessions.forEach(session => session.getD_details());
+  }
+
+  sessions(){
+    return this._sessions;
+  }
+
+  chairs(){
+    return this._chairs;
+  }
+
+  program_committee(){
+    return this._program_committee;
+  }
+
   // Este es un methodo Factory
-  create_session(session_name, type_name, reception_deadline){
-    switch (type_name) {
+  create_session(session_name, session_type, reception_deadline){
+    switch (session_type) {
       case 'Sesion Regular':
         return new Session(session_name, new RegularSession(), reception_deadline);
       case 'Sesion Workshop':
@@ -35,36 +59,42 @@ class Conference {
     }
   }
 
-  has_session(session_name, type_session){
+  has_session(session_name, session_type){
     return this._sessions.some(
-      session => (session._topic_name === session_name && session._session_type._name === type_session)
+      session => (
+        session.topic_name() === session_name && session.session_type().name() === session_type
+      )
     );
   }
 
-  find_session(session_name, type_session){
+  find_session(session_name, session_type){
     return this._sessions.find(
-      session => (session._topic_name === session_name && session._session_type._name === type_session)
+      session => (
+        session.topic_name() === session_name && session.session_type().name() === session_type
+      )
     );
   }
   
-  add_session(session_name, type_session, reception_deadline){
+  add_session(session_name, session_type, reception_deadline){
     let error_message = '';
-    if(this.has_session(session_name, type_session)){
+    if(this.has_session(session_name, session_type)){
       error_message = 'Este tipo de session con este nombre ya fue agregado a la conferencia'
     }  
-    if (this.find_session(session_name, type_session)) {
+    if (this.find_session(session_name, session_type)) {
       error_message = 'No se reconoce este tipo de sesión'
     }
     if (error_message) {
       throw new Error(error_message.trim());
     }else{
-      const session = this.create_session(session_name, type_session, reception_deadline)
+      const session = this.create_session(session_name, session_type, reception_deadline)
       this._sessions.push(session);
     } 
   }
 
   has_chair(user){
-    return this._chairs.some(chair => chair && (chair.user()===user));
+    return this._chairs.some(
+      chair => chair && (chair.user()===user)
+    );
   }
 
   add_chairs(user){
@@ -94,24 +124,6 @@ class Conference {
       throw new Error('Este usuario ya se encuentra en el comité del programa de la conferencia');
     }
   }
-
-  getDetails() {
-    this._sessions.forEach(session => session.getDetails());
-  }
-
-  sessions(){
-    return this._sessions;
-  }
-
-  chairs(){
-    return this._chairs;
-  }
-
-  program_committee(){
-    return this._program_committee;
-  }
-
-  
 
 }
 

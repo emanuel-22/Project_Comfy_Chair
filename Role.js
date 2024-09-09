@@ -12,7 +12,7 @@ class Role {
     throw new Error('Este método se implementa en la subclase');
   }
 
-  create_conference(name, from_date, from_hour, to_date, to_hour){
+  create_conference(name, start_date, start_time, end_date, end_time){
     throw new Error('Este método se implementa en la subclase');
   }
 

@@ -16,6 +16,7 @@ beforeEach( ()=> {
   deadline = date.toISOString().split('T')[0];
 
   conference = new Conference('CACIC', '2024-06-15', '09:00', '2024-06-19', '18:00');
+
   sessionRegular = new Session('Agentes y Sistemas Inteligentes', new RegularSession(), deadline);
   sessionSecond = new Session('Arquitectura, Redes y Sistemas Operativos', new RegularSession(), deadline);
 
@@ -26,6 +27,8 @@ beforeEach( ()=> {
 });
 
 describe("Una conferencia ", ()=>{
+
+
   it("puede tener varias sesiones",()=>{
     conference.add_session('Agentes y Sistemas Inteligentes', 'Sesion Regular', deadline);
     conference.add_session('Arquitectura, Redes y Sistemas Operativos', 'Sesion Regular', deadline);
@@ -48,7 +51,7 @@ describe("Una conferencia ", ()=>{
     expect(conference.sessions()).toContainEqual(sessionWorkshop);
   })
 
-  it("verifica que se cargó una sesión de forma correcta",()=>{
+  it("verificar que se cargó una sesión de forma correcta",()=>{
     conference.add_session('Agentes y Sistemas Inteligentes', 'Sesion Poster', deadline);
     expect(conference.has_session('Agentes y Sistemas Inteligentes', 'Sesion Poster')).toBe(true);
   })
@@ -59,16 +62,16 @@ describe("Una conferencia ", ()=>{
     }).toThrow();
   })
 
-  it("no puede crear la misma sesión dos veces (mismo nombre y tipo de sesión)",()=>{
+  it("no puede crear la misma sesión con el mismo nombre y tipo de sesión",()=>{
     conference.add_session('Agentes y Sistemas Inteligentes', 'Sesion Regular', deadline);
-    let duplicated_some = () => {conference.add_session('Agentes y Sistemas Inteligentes', 'Sesion Regular', deadline)};
-    expect(duplicated_some).toThrow();
+    let duplicated_session = () => {conference.add_session('Agentes y Sistemas Inteligentes', 'Sesion Regular', deadline)};
+    expect(duplicated_session).toThrow();
   })
 
-  it("no permitir agregar el mismo usuario 2 veces a la lista de chairs",()=>{
+  it("evitar el mismo usuario 2 veces a la lista de chairs",()=>{
     conference.add_chairs(userFirst)
-    let add_some_user = ()=>{conference.add_chairs(userFirst)};
-    expect(add_some_user).toThrow();
+    let duplicated_user = ()=>{conference.add_chairs(userFirst)};
+    expect(duplicated_user).toThrow();
   })
 
   it("cuando agregamos un usuario a la lista de chairs, se debe agregar el rol de Chair",()=>{
@@ -76,10 +79,10 @@ describe("Una conferencia ", ()=>{
     expect(userFirst.has_role('Chair')).toBe(true);
   })
 
-  it("no permitir agregar el mismo usuario 2 veces al comité de programa",()=>{
+  it("evitar agregar el mismo usuario 2 veces al comité de programa",()=>{
     conference.add_program_committee(userFirst)
-    let add_some_user = ()=>{conference.add_program_committee(userFirst)};
-    expect(add_some_user).toThrow();
+    let duplicated_user = ()=>{conference.add_program_committee(userFirst)};
+    expect(duplicated_user).toThrow();
   })
 
   it("cuando agregamos un usuario al comité de programa, se debe agregar el rol de Revisor",()=>{
