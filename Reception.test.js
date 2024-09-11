@@ -1,32 +1,22 @@
 const Reception = require('./Reception');
 const Bidding = require('./Bidding');
+const Session = require('./Session');
+const Article = require('./Article');
 
 let sessionMock;
 let reception;
 let articleMock;
 let notificationAuthorMock;
 
+jest.mock('./Session');
+jest.mock('./Article');
+jest.mock('./User');
+
 
 beforeEach( ()=> {
-  sessionMock = {
-    is_accepted: jest.fn(),
-    add_article_to_list: jest.fn(),
-    set_session_state: jest.fn(),
-  };
-
+  articleMock = new Article('IT Project Failures, Causes and Cures', 'https://refactoring.guru/design-patterns/state');
+  sessionMock = new Session('Agentes y Sistemas Inteligentes', {}, '2025-05-02'); 
   reception = new Reception(sessionMock, '2024-12-31');
-
-  articleMock = {
-    set_notification_author: jest.fn(),
-    notification_author: jest.fn().mockReturnValue({
-      receive_notification: jest.fn(),
-    }),
-  };
-
-  notificationAuthorMock = {
-    receive_notification: jest.fn(),
-  };
-
 });
 
 describe("En la etapa de recepción", ()=>{
@@ -48,6 +38,7 @@ describe("En la etapa de recepción", ()=>{
   });
 
   it('el artículo es aceptado y la fecha de envio es valida', () => {
+    articleMock.notification_author.mockReturnValue({receive_notification: jest.fn()})
     sessionMock.is_accepted.mockReturnValue(true); 
     reception.validated_dates = jest.fn().mockReturnValue(true); 
     reception.add_article(articleMock, notificationAuthorMock, '2024-11-03');

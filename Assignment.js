@@ -15,7 +15,7 @@ class Assignment extends SessionState {
     this._session.set_session_state(new Revision(this._session));
   }
 
-  add_article(article, send_date) {
+  add_article(article, notification_author, send_date) {
     throw new Error('Durante esta instancia, ya no se aceptan mas articulos');
   }
 

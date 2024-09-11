@@ -30,9 +30,10 @@ jest.mock('./PosterSession');
 jest.mock('./RegularArticle'); 
 jest.mock('./Poster'); 
 
+let mockRegularSession, mockReception, session, mockBidding, mockAssignment, mockRevision, mockSelection, mockRegularArticle, 
+mockPoster, mockReviewer, userFirst, userSecond, userThird, userFourth, userFifth;
 
 
-let mockRegularSession, mockReception, session, mockBidding, mockAssignment, mockRevision, mockSelection, mockArticle, mockReviewer;
 
 beforeEach(async ()=> {
 
@@ -41,48 +42,96 @@ beforeEach(async ()=> {
   mockReception = new Reception();
   mockReception.add_article = jest.fn(); 
   session = new Session('AI Conference', mockRegularSession, '2024-12-31');
-  session._session_state = mockReception; 
+  session.set_session_state(mockReception); 
 
   mockBidding = new Bidding(session);
   mockAssignment = new Assignment(session);
   mockRevision = new Revision(session);
   mockSelection= new Selection(session);
 
-  mockArticle = new RegularArticle('Requerimientos no funcionales para App', 'https://refactoring.guru/design-patterns/chain-of-responsibility');
-  mockArticle = new Poster('Metodología para el desarrollo de aplicaciones móviles', 'http://www.scielo.org.co/scielo.php?pid=S0123-921X2014000200003&script=sci_arttext');
+  poster = new Poster('Metodología para el desarrollo de aplicaciones móviles', 'http://www.scielo.org.co/scielo.php?pid=S0123-921X2014000200003&script=sci_arttext');
+  regularArticle = new RegularArticle('¿Por qué Fracasan los Proyectos de Software?; Un Enfoque Organizacional', 'https://courses.edx.org/asset-v1:MexicoX+UPEVIPN03x+T32015+type@asset+block/por_que_fallan_los_proy_de_soft.pdf');
 
   mockReviewer = new User('Fenandez', 'Cristina', 'UBA', 'fercristina@gmail.com', 'asdasd');
-  mockAuthor = new User('Debrito', 'Juan', 'ULP', 'debritojuan@gmail.com', 'asdasd');
 
+  userFirst = new User('Cruz', 'Rosana', 'UNSa', 'cruzrosana@gmail.com', 'asdasd');
+  userSecond = new User('Mendez', 'Maria', 'UNLP', 'mariamendez@gmail.com', 'asdasd');
+  userThird = new User('Mendez', 'Mariano', 'UNJU', 'marianomendez@gmail.com', 'asdasd');
+  userFourth = new User('Rodriguez', 'Maria', 'UNLP', 'mariarodriguez@gmail.com', 'asdasd');
+  userFifth = new User('Lopez', 'Rosa', 'UNLP', 'lopezrosa@gmail.com', 'asdasd');
+
+  userSixth = new User('Rodriguez', 'Dalma', 'UNJU', 'dalmarodriguez@gmail.com', 'asdasd');
   bestMethod= new BestMethod(session);
   fixedcutMethod= new FixedCutMethod(session);
 
+});
+
+describe("Cualquier sesión", () =>{
+
+  it("puede tener varios revisores",()=>{
+    session.add_reviewer(userFirst); 
+    session.add_reviewer(userSecond); 
+    expect(session.reviewers()).toContainEqual(userFirst, userSecond);
+  });
+
+  it("no puede tener el mismo revisor en la lista de revisores 2 veces",()=>{
+    session.add_reviewer(userFirst); 
+    session.add_reviewer(userSecond); 
+    let duplicated_reviewer = ()=>{session.add_reviewer(userFirst)};
+    expect(duplicated_reviewer).toThrow();  
+  });
+
+  it("debe tener el número de revisiones = Cant. de articulos * 3",()=>{
+    const article = new Article('Requerimientos no funcionales para App', 'https://example.com/article1');
+    session.add_article_to_list(article);
+    expect(session.count_reviews()).toEqual(3);
+  });
 
 });
 
 describe("La sesión en estado Reception", () =>{
 
   it("deberia agregar articulos al estado de la sesión", () => {
-    const article = new RegularArticle('¿Por qué Fracasan los Proyectos de Software?; Un Enfoque Organizacional', 'https://courses.edx.org/asset-v1:MexicoX+UPEVIPN03x+T32015+type@asset+block/por_que_fallan_los_proy_de_soft.pdf');
-    session.receive_article(article, mockAuthor, '2024-11-01');
-    expect(mockReception.add_article).toHaveBeenCalledWith(article, mockAuthor, '2024-11-01');
+    session.receive_article(regularArticle, userFirst, '2024-11-01');
+    expect(mockReception.add_article).toHaveBeenCalledWith(regularArticle, userFirst, '2024-11-01');
   });
 
   it("validamos que el articulo fue agregado correctamente", () => {
-    const article = new RegularArticle('¿Por qué Fracasan los Proyectos de Software?; Un Enfoque Organizacional', 'https://courses.edx.org/asset-v1:MexicoX+UPEVIPN03x+T32015+type@asset+block/por_que_fallan_los_proy_de_soft.pdf');
-    session.add_article_to_list(article);
-    expect(session.has_article(article)).toBe(true);
+    session.add_article_to_list(regularArticle);
+    expect(session.has_article(regularArticle)).toBe(true);
   });
 
   it("validamos que el articulo no se encuentra en la lista", () => {
-    const article = new RegularArticle('¿Por qué Fracasan los Proyectos de Software?; Un Enfoque Organizacional', 'https://courses.edx.org/asset-v1:MexicoX+UPEVIPN03x+T32015+type@asset+block/por_que_fallan_los_proy_de_soft.pdf');
-    expect(session.has_article(article)).toBe(false);
+    expect(session.has_article(regularArticle)).toBe(false);
   });
 
 });
 
+describe("La sesión en estado Bidding", () =>{
 
+  it('mostrar un error al asignar un revisor que ya existe', () => {
+    userFirst.find_email = jest.fn().mockReturnValue(false);
+    session.set_session_state(mockBidding)
+    session.add_reviewer(userFirst);
+    expect(() => session.add_reviewer(userFirst)).toThrow();
+  });
 
+  
+  it("asigna artículos aleatoriamente a revisores",()=>{
+    regularArticle.count_pending_reviewers.mockReturnValue(3); 
+    userThird.find_email = jest.fn().mockReturnValue(true);
+    userFourth.find_email = jest.fn().mockReturnValue(true);
+    userFifth.find_email = jest.fn().mockReturnValue(true);
+    session.set_session_state(mockBidding)
+    session.add_article_to_list(regularArticle)
+    session.add_reviewer(userThird);
+    session.add_reviewer(userFourth);
+    session.add_reviewer(userFifth); 
+    session.send_articles_randomly();
+    expect(regularArticle.count_pending_reviewers()).toEqual(3);
+  });
+
+});
 
 
 
@@ -110,14 +159,7 @@ describe("La sesión en estado Reception", () =>{
 
 // describe("La sesión en estado Bidding", () =>{
 
-//   it('mostrar un error al asignar un revisor que ya existe', () => {
-//     const user = new User('Barboza', 'Emanuel', 'UNLP', 'emabarboza@exa.unsa.edu.ar', 'asdasd');
-//     user.find_email = jest.fn().mockReturnValue(false);
-//     console.log(user.find_email)
-//     session.set_session_state(mockBidding)
-//     session.add_reviewer(user);
-//     expect(() => session.add_reviewer(user)).toThrow();
-//   });
+
 
   // it("debe mostrar error si no hay revisores", () => {
   //   // session = {

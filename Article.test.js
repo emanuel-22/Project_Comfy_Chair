@@ -2,9 +2,7 @@ const RegularArticle = require('./RegularArticle');
 const Poster = require('./Poster');
 const User = require('./User');
 
-
 let regularArticle, posterArticle;
-
 
 beforeEach( ()=> {
   userFirst = new User('Barboza', 'Laura', 'UNSa', 'barbozalau@gmail.com', 'asdasd');
@@ -147,7 +145,7 @@ describe("Un articulo regular o poster", ()=>{
     expect(posterArticle.count_not_interesteds()).toBe(0);
   });
 
-  it("debería asignar revisores 'no interesado', si hay menos de 3 interesados y quizas", () => {
+  it("debería asignar revisores 'No interesado', si hay menos de 3 interesados y quizas", () => {
     users.forEach(user => posterArticle.process_add_to_pending(user));
     posterArticle.process_assign_bid('No interesado', users[0]);
     posterArticle.process_assign_bid('Quizas', users[1]);
@@ -159,7 +157,7 @@ describe("Un articulo regular o poster", ()=>{
     expect(posterArticle.count_not_interesteds()).toBe(1);
   });
 
-  it("debería asignar revisores 'no interesado', si hay menos de 3 interesados y quizas", () => {
+  it("debería asignar revisores 'No interesado', si hay menos de 3 interesados y quizas", () => {
     users.forEach(user => posterArticle.process_add_to_pending(user));
     posterArticle.process_assign_bid('No interesado', users[0]);
     posterArticle.process_assign_bid('No interesado', users[1]);
@@ -189,6 +187,7 @@ describe("Un articulo regular o poster", ()=>{
       posterArticle.process_score(userFirst, 2, 'Me parece que este articulo es muy bueno...');
     }).toThrow();
   });
+
 });
 
 

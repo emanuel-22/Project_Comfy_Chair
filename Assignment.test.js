@@ -1,111 +1,49 @@
+const Assignment = require('./Assignment');
+const Revision = require('./Revision');
 const User = require('./User');
-const Poster = require('./Poster');
-const PosterSession = require('./PosterSession');
 const Session = require('./Session');
+const Article = require('./Article');
 
 
-beforeEach(async ()=> {
-  timestamp = Date.now();
-  date = new Date(timestamp);
-  deadline = date.toISOString().split('T')[0];
+let sessionMock;
+let assignment;
+let articleMock, articleMock2;
 
-  dateOther = new Date('2024-07-27');
-  shippingDate = dateOther.toISOString().split('T')[0]; //2024-07-27
+jest.mock('./Session');
+jest.mock('./Article');
+jest.mock('./User');
 
-  posterSessionType = new Session('Agentes y Sistemas Inteligentes', new PosterSession(), deadline);
-  posterSessionType.proceed(); // Nos movemos de Recepción a Bidding
-  posterSessionType.proceed(); // Nos movemos de Bidding a Asignacion
 
-  userFirst = new User('Cruz', 'Rosana', 'UNSa', 'cruzrosana@gmail.com', 'asdasd');
-  userSecond = new User('Galvan', 'Lucas', 'UBA', 'lucasg@gmail.com', 'asdasd');
-  userThird = new User('Mamani', 'Rosana', 'UNSa', 'mamanirosi@gmail.com', 'asdasd');
-  userFourth = new User('Lopez', 'Juan', 'UNSa', 'juanlopez@gmail.com', 'asdasd');
+beforeEach( ()=> {
 
-  posterArticle = new Poster(
-    'Implementacion de metodologia agil a organizaciones no gubernamentales', 
-    'https://refactoring.guru/design-patterns/state',
-    'https://developero.io/blog/jest-mock-module-function-class-promises-axios-y-mas'
-  );
+  articleMock = new Article('IT Project Failures, Causes and Cures', 'https://refactoring.guru/design-patterns/state');
+  articleMock2 = new Article('IT Project Failures, Causes and Cures', 'https://refactoring.guru/design-patterns/state');
+  sessionMock = new Session('Agentes y Sistemas Inteligentes', {}, '2025-05-02'); 
+  assignment = new Assignment(sessionMock, '2024-12-31');
+  userMock = new User('Benavidez', 'Lucho', 'UNJu', 'pbarranco@gmail.com', 'asdasd');
+  sessionMock._articles = [articleMock, articleMock2];
+
 });
 
+describe("En la etapa de Asignación", ()=>{
 
-describe("En la etapa de Asignacion, las sesiones", () =>{
-  // it('deberia proceder de Recepcion a Bidding y de Bidding a Asignación de forma correcta', () => {
-  //   expect(posterSessionType.session_state().name()).toBe('Asignacion');
-  // });
-
-  it("no se aceptan mas articulos",()=>{
-    let invalideted = ()=>{posterSessionType.receive_article(posterArticle, shippingDate)};
-    expect(invalideted).toThrow();
+  it('verificamos que la sesion se encuentra en estado Asignacion', () => {
+    expect(assignment.name_state()).toBe('Asignacion');
   });
 
-  // it("asigno solo 3 revisores para cada articulo (Interesado, Interesado, Quizas)",()=>{
-  //   posterSessionType.add_article_to_list(posterArticle)
-  //   posterSessionType.add_reviewer(userFirst); 
-  //   posterSessionType.add_reviewer(userFourth); 
-  //   posterSessionType.add_reviewer(userSecond); 
-  //   posterSessionType.add_reviewer(userThird); 
-  //   posterArticle.process_assign_bid('Interesado', userFirst);
-  //   posterArticle.process_assign_bid('Interesado', userSecond);
-  //   posterArticle.process_assign_bid('Quizas', userThird);
-  //   posterArticle.process_assign_bid('No interesado', userFourth);
-  //   posterSessionType.assign_reviewers_to_article();
-  //   expect(posterArticle.count_confirmed_reviewers_article()).toBe(3);
-  //   expect(posterArticle.count_interesteds()).toBe(2);
-  //   expect(posterArticle.count_maybes()).toBe(1);
-  //   expect(posterArticle.count_not_interesteds()).toBe(1);
-  // });
+  it('la session pasa a estado Revisión', () => {
+    assignment.proceed();
+    expect(sessionMock.set_session_state).toHaveBeenCalledWith(expect.any(Revision));
+  });
 
-  // it("asigno solo 3 revisores para cada articulo (Interesado, Interesado, Interesado)",()=>{
-  //   posterSessionType.add_article_to_list(posterArticle)
-  //   posterSessionType.add_reviewer(userFirst); 
-  //   posterSessionType.add_reviewer(userFourth); 
-  //   posterSessionType.add_reviewer(userSecond); 
-  //   posterSessionType.add_reviewer(userThird); 
-  //   posterArticle.process_assign_bid('Interesado', userFirst);
-  //   posterArticle.process_assign_bid('Interesado', userSecond);
-  //   posterArticle.process_assign_bid('Interesado', userThird);
-  //   posterArticle.process_assign_bid('No interesado', userFourth);
-  //   posterSessionType.assign_reviewers_to_article();
-  //   expect(posterArticle.count_confirmed_reviewers_article()).toBe(3);
-  //   expect(posterArticle.count_interesteds()).toBe(3);
-  //   expect(posterArticle.count_maybes()).toBe(0);
-  //   expect(posterArticle.count_not_interesteds()).toBe(1);
-  // });
+  it('no se aceptan más artículos', () => {
+    expect(() => assignment.add_article(articleMock, userMock, '2025-05-02')).toThrow();
+  });
 
-  // it("asigno solo 3 revisores para cada articulo (Quizas, No interesado,  No interesado)",()=>{
-  //   posterSessionType.add_article_to_list(posterArticle)
-  //   posterSessionType.add_reviewer(userFirst); 
-  //   posterSessionType.add_reviewer(userFourth); 
-  //   posterSessionType.add_reviewer(userSecond); 
-  //   posterSessionType.add_reviewer(userThird); 
-  //   posterArticle.process_assign_bid('Quizas', userFirst);
-  //   posterArticle.process_assign_bid('No interesado', userSecond);
-  //   posterArticle.process_assign_bid('No interesado', userThird);
-  //   posterArticle.process_assign_bid('No interesado', userFourth);
-  //   posterSessionType.assign_reviewers_to_article();
-  //   expect(posterArticle.count_confirmed_reviewers_article()).toBe(3);
-  //   expect(posterArticle.count_interesteds()).toBe(0);
-  //   expect(posterArticle.count_maybes()).toBe(1);
-  //   expect(posterArticle.count_not_interesteds()).toBe(3);
-  // });
+  it('se inicia el proceso de asignacion de revisores a cada artículo', () => {
+    assignment.assign_reviewers_to_article();
+    expect(articleMock.process_assign_reviewers).toHaveBeenCalled();
+    expect(articleMock2.process_assign_reviewers).toHaveBeenCalled();
+  });
 
-  // it("asigno solo 3 revisores para cada articulo (Quizas, Quizas,  Quizas)",()=>{
-  //   posterSessionType.add_article_to_list(posterArticle)
-  //   posterSessionType.add_reviewer(userFirst); 
-  //   posterSessionType.add_reviewer(userFourth); 
-  //   posterSessionType.add_reviewer(userSecond); 
-  //   posterSessionType.add_reviewer(userThird); 
-  //   posterArticle.process_assign_bid('Quizas', userFirst);
-  //   posterArticle.process_assign_bid('Quizas', userSecond);
-  //   posterArticle.process_assign_bid('Quizas', userThird);
-  //   posterArticle.process_assign_bid('No interesado', userFourth);
-  //   posterSessionType.assign_reviewers_to_article();
-  //   expect(posterArticle.count_confirmed_reviewers_article()).toBe(3);
-  //   expect(posterArticle.count_interesteds()).toBe(0);
-  //   expect(posterArticle.count_maybes()).toBe(3);
-  //   expect(posterArticle.count_not_interesteds()).toBe(1);
-  // });
-  
-
-})
+});

@@ -84,6 +84,8 @@ describe("Un usuario de la ComfyChair ", ()=>{
   });
 
   it("sin rol Autor, no puede enviar articulos",()=>{
+    userFirst.add_role('Revisor');
+    userFirst.add_role('Chair');
     expect(() => {
       userFirst.send_article(regularArticle, regularSessionType, date_finally);
     }).toThrow();
