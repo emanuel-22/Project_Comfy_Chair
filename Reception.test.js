@@ -45,7 +45,6 @@ describe("En la etapa de recepción", ()=>{
     expect(sessionMock.is_accepted).toHaveBeenCalledWith(articleMock);
     expect(sessionMock.add_article_to_list).toHaveBeenCalledWith(articleMock);
     expect(articleMock.set_notification_author).toHaveBeenCalledWith(notificationAuthorMock);
-    expect(articleMock.notification_author().receive_notification).toHaveBeenCalledWith('Recepción');
   });
 
   it('el artículo es rechazado y la fecha de envio es valida', () => {

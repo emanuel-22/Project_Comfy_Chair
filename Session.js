@@ -86,7 +86,7 @@ class Session {
   }
 
   find_email(user){
-    return this._reviewers.some(reviewer => reviewer._email === user._email);
+    return this._reviewers.some(reviewer => reviewer.email()===user.email());
   }
 
   add_reviewer(user){
@@ -156,7 +156,11 @@ class Session {
   start_articles_select() {
     if (this._num_max_accepted!=0) {
       const selected_articles = this._selection_method.select(this._articles);
-      this._selected_articles = selected_articles.slice(0, this._num_max_accepted);
+      const selected_final_articles = selected_articles.slice(0, this._num_max_accepted);
+      selected_final_articles.map(
+        article => article.send_notification('Su articulo fue seleccionado en el proceso de Selección de esta Sesion')
+      ); 
+      this._selected_articles = selected_final_articles;
     }else{
       throw new Error('No esta definido el número máximo a aceptar de esta sesión');
     }

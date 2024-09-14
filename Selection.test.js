@@ -16,7 +16,7 @@ beforeEach( ()=> {
   articleMock = new Article('IT Project Failures, Causes and Cures', 'https://refactoring.guru/design-patterns/state');
   sessionMock = new Session('Agentes y Sistemas Inteligentes', {}, '2025-05-02'); 
   selection = new Selection(sessionMock, '2024-12-31');
-  userMock = new User('Barranco', 'Pablo', 'UNJu', 'pbarranco@gmail.com', 'asdasd');
+  userMock = new User('Lopez', 'Mario', 'UNJu', 'mlopez@gmail.com', 'asdasd');
 
 });
 

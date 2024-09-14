@@ -7,14 +7,14 @@ class FixedCutMethod extends SelectionMethod {
   }
 
   validated_percentage(percentage){
-    return (percentage <= 1) ? percentage : (percentage/100)
+    return (percentage/100)
   }
 
   select(articles) {
     articles.forEach(article => {
-      article.calculate_average_score();
+      article.calculate_final_score();
     });
-    const sorted_articles = articles.sort((a, b) => b._average_score - a._average_score);
+    const sorted_articles = articles.sort((a, b) => b.final_score() - a.final_score());
     const cut_off_index = Math.ceil(sorted_articles.length * this._percentage);
     return sorted_articles.slice(0, cut_off_index);
   }

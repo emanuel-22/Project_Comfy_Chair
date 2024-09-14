@@ -27,7 +27,7 @@ beforeEach( ()=> {
 
 describe("En la etapa de Asignación", ()=>{
 
-  it('verificamos que la sesion se encuentra en estado Asignacion', () => {
+  it('se verifica que la sesion se encuentra en estado Asignacion', () => {
     expect(assignment.name_state()).toBe('Asignacion');
   });
 

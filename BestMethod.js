@@ -9,9 +9,9 @@ class BestMethod extends SelectionMethod {
 
   select(articles) {
     articles.forEach(article => {
-      article.calculate_average_score();
+      article.calculate_final_score();
     });
-    return articles.filter(article => article._average_score > this._limit);
+    return articles.filter(article => article.final_score() > this._limit);
   }
 }
 

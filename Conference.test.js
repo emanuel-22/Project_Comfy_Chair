@@ -14,20 +14,15 @@ beforeEach( ()=> {
   timestamp = Date.now();
   date = new Date(timestamp);
   deadline = date.toISOString().split('T')[0];
-
   conference = new Conference('CACIC', '2024-06-15', '09:00', '2024-06-19', '18:00');
-
   sessionRegular = new Session('Agentes y Sistemas Inteligentes', new RegularSession(), deadline);
   sessionSecond = new Session('Arquitectura, Redes y Sistemas Operativos', new RegularSession(), deadline);
-
   sessionPoster = new Session('Agentes y Sistemas Inteligentes', new PosterSession(), deadline);
   sessionWorkshop = new Session('Agentes y Sistemas Inteligentes', new WorkshopSession(), deadline);
-
   userFirst = new User('Martinez', 'Julio', 'UBA', 'martinezjulio@gmail.com', 'asdasd');
 });
 
 describe("Una conferencia ", ()=>{
-
 
   it("puede tener varias sesiones",()=>{
     conference.add_session('Agentes y Sistemas Inteligentes', 'Sesion Regular', deadline);
@@ -51,18 +46,18 @@ describe("Una conferencia ", ()=>{
     expect(conference.sessions()).toContainEqual(sessionWorkshop);
   })
 
-  it("verificar que se cargó una sesión de forma correcta",()=>{
+  it("se verifica que se cargó una sesión de forma correcta",()=>{
     conference.add_session('Agentes y Sistemas Inteligentes', 'Sesion Poster', deadline);
     expect(conference.has_session('Agentes y Sistemas Inteligentes', 'Sesion Poster')).toBe(true);
   })
 
-  it("no puede crear una session de otro tipo que no sea regular, poster, workshop",()=>{
+  it("no se puede crear una session de otro tipo que no sea regular, poster, workshop",()=>{
     expect(() => {
       conference.add_session('Agentes y Sistemas Inteligentes', 'Otra Sesion', deadline);
     }).toThrow();
   })
 
-  it("no puede crear la misma sesión con el mismo nombre y tipo de sesión",()=>{
+  it("no se puede crear la misma sesión con el mismo nombre y tipo de sesión",()=>{
     conference.add_session('Agentes y Sistemas Inteligentes', 'Sesion Regular', deadline);
     let duplicated_session = () => {conference.add_session('Agentes y Sistemas Inteligentes', 'Sesion Regular', deadline)};
     expect(duplicated_session).toThrow();
@@ -74,7 +69,7 @@ describe("Una conferencia ", ()=>{
     expect(duplicated_user).toThrow();
   })
 
-  it("cuando agregamos un usuario a la lista de chairs, se debe agregar el rol de Chair",()=>{
+  it("cuando se agrega un usuario a la lista de chairs, se debe agregar el rol de Chair",()=>{
     conference.add_chairs(userFirst)
     expect(userFirst.has_role('Chair')).toBe(true);
   })
@@ -85,7 +80,7 @@ describe("Una conferencia ", ()=>{
     expect(duplicated_user).toThrow();
   })
 
-  it("cuando agregamos un usuario al comité de programa, se debe agregar el rol de Revisor",()=>{
+  it("cuando se agrega un usuario al comité de programa, se debe agregar el rol de Revisor",()=>{
     conference.add_program_committee(userFirst)
     expect(userFirst.has_role('Revisor')).toBe(true);
   })

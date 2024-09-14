@@ -13,6 +13,10 @@ class User {
     this._roles = [];
   }
 
+  email(){
+    return this._email;
+  }
+
   roles(){
     return this._roles;
   }
@@ -39,8 +43,8 @@ class User {
     return this._roles.find(role => role && role.name() === role_name);
   }
 
-  receive_notification(name_state){
-    console.log(`El articulo ${this._title} se encuentra en estado: ${name_state}`);
+  receive_notification(message){
+    console.log(message);
   }
 
   add_role(role_name){

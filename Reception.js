@@ -25,9 +25,9 @@ class Reception extends SessionState {
     if (this._session.is_accepted(article) && this.validated_dates(send_date)) {
       this._session.add_article_to_list(article);
       article.set_notification_author(notification_author);
-      article.notification_author().receive_notification(this.name_state());
+      article.send_notification('Su articulo fue aceptado en el estado de Recepcion de esta Sesión');
     } else {
-      throw new Error('El articulo fue rechazado en esta Sesión');
+      throw new Error('El artículo fue rechazado en esta Sesión');
     }
   }
 

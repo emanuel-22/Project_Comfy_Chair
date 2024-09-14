@@ -22,11 +22,11 @@ beforeEach( ()=> {
 
 describe("En la etapa de Bidding", ()=>{
 
-  it('verificamos que la sesion se encuentra en estado Bidding', () => {
+  it('se verifica que la sesion se encuentra en estado Bidding', () => {
     expect(bidding.name_state()).toBe('Bidding');
   });
 
-  it('la session pasa a estado Asignación', () => {
+  it('la sesion pasa a estado Asignación', () => {
     bidding.proceed();
     expect(sessionMock.set_session_state).toHaveBeenCalledWith(expect.any(Assignment));
   });

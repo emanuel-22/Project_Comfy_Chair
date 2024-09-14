@@ -1,6 +1,7 @@
 const SessionType = require('./SessionType.js');
 
 class PosterSession extends SessionType {
+  
   constructor() {
     super('Sesion Poster');
   }

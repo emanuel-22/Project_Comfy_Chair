@@ -12,7 +12,7 @@ class Article {
 
     // Definí aqui porque los articulos son de las sesiones, los revisores pueden ser de varias sesiones
     this._reviewers_article = [];
-    this._average_score = 0;
+    this._final_score = 0;
   }
 
   validated_title(){
@@ -29,6 +29,10 @@ class Article {
 
   notification_author(){
     return this._notification_author;
+  }
+
+  send_notification(message){
+    this._notification_author.receive_notification(message);
   }
 
   has_author(user){
@@ -207,11 +211,15 @@ class Article {
     }
   }
 
-  calculate_average_score(){
-    const total_score = this.confirmed_reviewers_article().reduce(
-      (sum, review_article)=>sum+(review_article._score || 0)
-    );
-    this._average_score = this.confirmed_reviewers_article().length ? total_score / this._review_article.length : 0;
+  final_score(){
+    return this._final_score;
+  }
+
+  calculate_final_score(){
+    const confirmedReviewers = this.confirmed_reviewers_article();
+    const total_score = confirmedReviewers.reduce((sum, review_article) => sum + (review_article.score() || 0), 0);
+    //const value_average_score = this.confirmed_reviewers_article().length ? total_score / this.count_confirmed_reviewers_article() : 0;
+    this._final_score = total_score;
   }
 
   

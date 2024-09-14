@@ -1,3 +1,4 @@
+const Author = require('./Author');
 const User = require('./User');
 const Session = require('./Session');
 const RegularSession = require('./RegularSession');
@@ -17,11 +18,6 @@ beforeEach( ()=> {
   date = new Date(timestamp);
   date_finally = date.toISOString().split('T')[0];
 
-  firstDate = new Date(2023, 5, 12);
-  firstHour = new Date().setHours(9, 0, 0, 0);
-  secondDate = new Date(2023, 6, 18);
-  secondHour = new Date().setHours(18, 0, 0, 0);
-
   userFirst = new User('Barboza', 'Emanuel', 'UNSa', 'emanuelbarboza5@gmail.com', 'asdasd');
   userSecond = new User('Mendez', 'Maria', 'UNSa', 'mendezmaria@gmail.com', 'asdasd');
 
@@ -35,7 +31,6 @@ beforeEach( ()=> {
 
 });
 
-//----------------------------------------------------------------------
 describe("Un usuario de la ComfyChair ", ()=>{
 
   it("no puede ingresarse un rol distinto de Chair, Autor o Revisor",()=>{
@@ -53,83 +48,77 @@ describe("Un usuario de la ComfyChair ", ()=>{
   it("no puede tener el mismo rol 2 veces",()=>{
     userFirst.add_role('Chair');
     userFirst.add_role('Autor');
-    let duplicate_role = ()=>{userFirst.add_role('Autor')};
-    expect(duplicate_role).toThrow();
+    expect(()=>{userFirst.add_role('Autor')}).toThrow();
+  });
+
+  test('debe poder encontrar un rol', () => {
+    userFirst.add_role('Autor');
+    expect(userFirst.has_role('Autor')).toBe(true);
+    expect(userFirst.find_role('Autor')).toBeInstanceOf(Author);
   });
 
   it("con rol Chair, puede crear una conferencia",()=>{
     userFirst.add_role('Chair');
-    expect(() => {
-      userFirst.create_conference('IA International', 
-        firstDate.toISOString().split('T')[0], firstHour, 
-        secondDate.toISOString().split('T')[0], secondHour
-      );
-    }).not.toThrow();
+    const chairRole = userFirst.find_role('Chair');
+    jest.spyOn(chairRole, 'create_conference').mockImplementation(() => {});
+    userFirst.create_conference('IA International', '2023-05-02', '09:00', '2023-07-02', '18:00');
+    expect(chairRole.create_conference).toHaveBeenCalledWith('IA International', '2023-05-02', '09:00', '2023-07-02', '18:00');
   });
 
   it("sin rol Chair, no puede crear una conferencia",()=>{
-    expect(() => {
-      userFirst.create_conference('IA International', 
-        firstDate.toISOString().split('T')[0], firstHour, 
-        secondDate.toISOString().split('T')[0], secondHour
-      );
-    }).toThrow();
+    expect(() => {userFirst.create_conference('IA International', '2023-05-02', '09:00', '2023-07-02', '18:00')}).toThrow();
   });
 
   it("con rol Autor, puede enviar articulos",()=>{
     userFirst.add_role('Autor');
-    expect(() => {
-      userFirst.send_article(regularArticle, regularSessionType, date_finally);
-    }).not.toThrow();
+    const authorRole = userFirst.find_role('Autor');
+    jest.spyOn(authorRole, 'send_article').mockImplementation(() => {});
+    userFirst.send_article(regularArticle, regularSessionType, date_finally);
+    expect(authorRole.send_article).toHaveBeenCalledWith(regularArticle, regularSessionType, date_finally);
   });
 
   it("sin rol Autor, no puede enviar articulos",()=>{
     userFirst.add_role('Revisor');
     userFirst.add_role('Chair');
-    expect(() => {
-      userFirst.send_article(regularArticle, regularSessionType, date_finally);
-    }).toThrow();
-  });
-
-  it("con rol Revisor, puede enviar bids de un articulo",()=>{
-    userFirst.add_role('Revisor');
-    expect(() => {
-      userFirst.send_bids(regularArticle, regularSessionType, 'Interesado');
-    }).not.toThrow();
-  });
-
-  it("sin rol Revisor, no puede enviar bids de un articulo",()=>{
-    expect(() => {
-      userFirst.send_bids(regularArticle, regularSessionType, 'Interesado');
-    }).toThrow();
+    expect(() => {userFirst.send_article(regularArticle, regularSessionType, date_finally)}).toThrow();
   });
 
   it("con rol Chair, puede asignar un artículo a un Revisor",()=>{
     userFirst.add_role('Chair');
-    userSecond.add_role('Revisor');
-    expect(() => {
-      userFirst.assign_article_to_reviewer(regularArticle, regularSessionType, userSecond);
-    }).not.toThrow();
+    userSecond.add_role('Revisor')
+    const chairRole = userFirst.find_role('Chair');
+    jest.spyOn(chairRole, 'send_article_to_review').mockImplementation(() => {});
+    userFirst.assign_article_to_reviewer(regularArticle, regularSessionType, userSecond);
+    expect(chairRole.send_article_to_review).toHaveBeenCalledWith(regularArticle, regularSessionType, userSecond);
   });
 
   it("sin rol Chair, no puede asignar un artículo a un Revisor",()=>{
     userSecond.add_role('Revisor');
-    expect(() => {
-      userFirst.assign_article_to_reviewer(regularArticle, regularSessionType, userSecond);
-    }).toThrow();
+    expect(() => {userFirst.assign_article_to_reviewer(regularArticle, regularSessionType, userSecond)}).toThrow();
+  });
+
+  it('con rol Revisor, puede enviar bids de un articulo', () => {
+    userFirst.add_role('Revisor');
+    const reviewerRole = userFirst.find_role('Revisor');
+    jest.spyOn(reviewerRole, 'send_bids').mockImplementation(() => {});
+    userFirst.send_bids(regularArticle, regularSessionType, 'Interesado');
+    expect(reviewerRole.send_bids).toHaveBeenCalledWith(regularArticle, regularSessionType, 'Interesado');
+  });
+
+  it("sin rol Revisor, no puede enviar bids de un articulo",()=>{
+    expect(() => {userFirst.send_bids(regularArticle, regularSessionType, 'Interesado')}).toThrow();
   });
 
   it("con rol Revisor, puede mandar puntaje de un artículo",()=>{
     userFirst.add_role('Revisor');
-    expect(() => {
-      userFirst.send_score(regularArticle, regularSessionType, 4, 'Algunas de las correcciones son las siguientes...');
-    }).not.toThrow();
+    const reviewerRole = userFirst.find_role('Revisor');
+    jest.spyOn(reviewerRole, 'send_score').mockImplementation(() => {});
+    userFirst.send_score(regularArticle, regularSessionType, 5, 'Este es un gran articulo porque...');
+    expect(reviewerRole.send_score).toHaveBeenCalledWith(regularArticle, regularSessionType, 5, 'Este es un gran articulo porque...');  
   })
 
   it("sin rol Revisor, no puede mandar puntaje de un artículo",()=>{
-    expect(() => {
-      userFirst.send_score(regularArticle, regularSessionType, 4, 'Algunas de las correcciones son las siguientes...');
-    }).toThrow();
+    expect(() => {userFirst.send_score(regularArticle, regularSessionType, 4, 'Algunas de las correcciones son las siguientes...')}).toThrow();
   })
 
 })

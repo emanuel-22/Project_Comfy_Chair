@@ -20,7 +20,6 @@ beforeEach( ()=> {
     'https://refactoring.guru/design-patterns/state',
     'https://refactoring.guru/design-patterns/state'
   );
-
   users = [ userFirst, userSecond, userThird, userFourth ];
 
 });
@@ -76,8 +75,7 @@ describe("Un articulo poster", ()=>{
     userSecond.add_role('Autor');
     posterArticle.add_author(userSecond);
     posterArticle.add_author(userFirst); // adentro asigno rol Autor
-   
-    let duplicated_author = () => {posterArticle.add_author(userSecond)};
+    const duplicated_author = () => {posterArticle.add_author(userSecond)};
     expect(duplicated_author).toThrow();
   })
 
@@ -116,7 +114,7 @@ describe("Un articulo regular o poster", ()=>{
     expect(reviewerArticle.bid()).toBe('Interesado');
   });
 
-  it("mostrar error si el bid no es válido", () => {
+  it("muestra error si el bid no es válido", () => {
     regularArticle.process_add_to_pending(userFirst);
     expect(() => article.process_assign_bid('Invalido', userFirst)).toThrow();
   });
@@ -183,9 +181,25 @@ describe("Un articulo regular o poster", ()=>{
   it("debe mostrar un error si el revisor no está confirmado", () => {
     posterArticle.process_add_to_pending(userFirst);
     posterArticle.process_assign_bid('Interesado', userFirst);
-    expect(() => {
-      posterArticle.process_score(userFirst, 2, 'Me parece que este articulo es muy bueno...');
-    }).toThrow();
+    expect(() => {posterArticle.process_score(userFirst, 2, 'Me parece que este articulo es muy bueno...')}).toThrow();
+  });
+
+  it("se verifica la suma de puntaje de revisores", () => {
+    userFirst.add_role('Revisor');
+    userSecond.add_role('Revisor');
+    userThird.add_role('Revisor');
+    posterArticle.process_add_to_pending(userFirst);
+    posterArticle.process_assign_bid('Interesado', userFirst);
+    posterArticle.process_add_to_pending(userSecond);
+    posterArticle.process_assign_bid('Interesado', userSecond);
+    posterArticle.process_add_to_pending(userThird);
+    posterArticle.process_assign_bid('Interesado', userThird);
+    posterArticle.process_assign_reviewers();
+    posterArticle.process_score(userFirst, 3, 'Este articulo es excelente porque...');
+    posterArticle.process_score(userSecond, 1, 'Este articulo tiene las siguientes correcciones...');
+    posterArticle.process_score(userThird, 2, 'Algunas observaciones...');
+    posterArticle.calculate_final_score();
+    expect(posterArticle._final_score).toBe(6);
   });
 
 });
